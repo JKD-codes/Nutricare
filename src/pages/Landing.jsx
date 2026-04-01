@@ -107,27 +107,27 @@ export default function Landing() {
               <button
                 key={c.id}
                 onClick={() => navigate('/onboarding', { state: { condition: c.id } })}
-                className={`glass-interactive p-6 sm:p-8 text-left group animate-fade-in-up stagger-${i + 1}`}
+                className={`glass-interactive p-6 sm:p-8 text-center flex flex-col items-center group animate-fade-in-up stagger-${i + 1}`}
                 style={{ opacity: 0 }}
               >
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${c.color} flex items-center justify-center mb-5 group-hover:scale-105 transition-transform`}>
-                  <c.icon className="w-6 h-6 text-white" />
+                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${c.color} flex items-center justify-center mb-5 group-hover:scale-105 transition-transform shadow-lg`}>
+                  <c.icon className="w-7 h-7 text-white" />
                 </div>
 
-                <h3 className="text-lg font-bold text-white mb-1">{c.name}</h3>
+                <h3 className="text-xl font-bold text-white mb-1.5">{c.name}</h3>
                 <p className="text-xs text-slate-500 mb-4">{c.full}</p>
                 <p className="text-slate-300 text-sm mb-6 leading-relaxed">{c.desc}</p>
 
-                <div className="space-y-1.5">
+                <div className="space-y-2 flex flex-col items-center">
                   {c.features.map((f, j) => (
                     <div key={j} className="flex items-center gap-2 text-xs text-slate-300">
-                      <div className={`w-1 h-1 rounded-full bg-gradient-to-r ${c.color}`} />
+                      <div className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${c.color}`} />
                       {f}
                     </div>
                   ))}
                 </div>
 
-                <div className="flex items-center gap-2 mt-6 text-primary text-sm font-medium group-hover:gap-3 transition-all">
+                <div className="flex items-center justify-center gap-2 mt-8 text-primary text-sm font-semibold group-hover:gap-3 transition-all">
                   Get Started <ChevronRight className="w-4 h-4" />
                 </div>
               </button>
@@ -149,10 +149,10 @@ export default function Landing() {
               { n: '02', title: 'Get Your Plan', desc: 'Our engine generates a 7-day meal plan with precise calculations.' },
               { n: '03', title: 'Track & Improve', desc: 'Monitor nutrition, rate meals, and watch your plan adapt.' }
             ].map((s, i) => (
-              <div key={i} className="stat-card p-8 text-center sm:text-left">
-                <div className="text-4xl font-black gradient-text mb-4 inline-block">{s.n}</div>
-                <h3 className="text-lg font-bold text-white mb-2">{s.title}</h3>
-                <p className="text-sm text-slate-400 leading-relaxed">{s.desc}</p>
+              <div key={i} className="stat-card p-8 text-center flex flex-col items-center">
+                <div className="text-5xl font-black gradient-text mb-5 inline-block">{s.n}</div>
+                <h3 className="text-xl font-bold text-white mb-3">{s.title}</h3>
+                <p className="text-base text-slate-400 leading-relaxed max-w-xs">{s.desc}</p>
               </div>
             ))}
           </div>
