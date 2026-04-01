@@ -115,11 +115,11 @@ export default function Dashboard({ profile, mealPlanData, onRegenerate }) {
         ))}
       </div>
 
-      {/* Main grid */}
-      <div className="grid lg:grid-cols-5 gap-8">
+      {/* Main content - Single Centered Column */}
+      <div className="flex flex-col items-center w-full space-y-12">
         {/* Meals */}
-        <div className="lg:col-span-3 space-y-5">
-          <div className="section-label mb-4 text-center">{DAY_NAMES[selectedDay]}'S MEALS</div>
+        <div className="w-full max-w-4xl space-y-5">
+          <div className="section-label mb-6 text-center text-lg">{DAY_NAMES[selectedDay]}'S MEALS</div>
 
           {currentDay?.meals.map((meal, idx) => (
             <button
@@ -127,35 +127,35 @@ export default function Dashboard({ profile, mealPlanData, onRegenerate }) {
               onClick={() => navigate(`/meal/${selectedDay}/${idx}`)}
               className="w-full meal-card text-center group flex flex-col items-center"
             >
-              <div className="text-4xl sm:text-5xl mb-4 shrink-0">{MEAL_ICONS[meal.type]}</div>
+              <div className="text-5xl lg:text-6xl mb-5 shrink-0 transition-transform group-hover:scale-110 duration-300">{MEAL_ICONS[meal.type]}</div>
               <div className="flex flex-col items-center w-full">
-                <div className="flex items-center justify-center gap-2 mb-3">
-                  <span className="tag tag-primary">{MEAL_LABELS[meal.type]}</span>
-                  <span className="text-xs text-slate-500 flex items-center gap-1">
-                    <Clock className="w-3.5 h-3.5" /> {meal.time}
+                <div className="flex items-center justify-center gap-2 mb-4">
+                  <span className="tag tag-primary text-sm px-4 py-1.5">{MEAL_LABELS[meal.type]}</span>
+                  <span className="text-sm text-slate-500 flex items-center gap-1.5 font-medium">
+                    <Clock className="w-4 h-4" /> {meal.time}
                   </span>
                 </div>
 
-                <h3 className="text-white font-bold text-lg sm:text-xl leading-snug mb-4 group-hover:text-primary transition-colors px-2">
+                <h3 className="text-white font-bold text-2xl sm:text-3xl leading-snug mb-5 group-hover:text-primary transition-colors px-4">
                   {meal.recipe.name}
                 </h3>
 
-                <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-4">
-                  <span className="macro-pill">
-                    <Flame className="w-4 h-4 text-orange-400" />
-                    <span className="text-white font-semibold">{meal.recipe.nutrition.calories}</span> kcal
+                <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mb-5">
+                  <span className="macro-pill text-base px-4 py-1.5">
+                    <Flame className="w-5 h-5 text-orange-400" />
+                    <span className="text-white font-bold">{meal.recipe.nutrition.calories}</span> <span className="text-slate-400 text-sm">kcal</span>
                   </span>
-                  <span className="macro-pill"><span className="dot bg-blue-500" /> C:{meal.recipe.nutrition.carbs}g</span>
-                  <span className="macro-pill"><span className="dot bg-emerald-500" /> P:{meal.recipe.nutrition.protein}g</span>
-                  <span className="macro-pill"><span className="dot bg-amber-500" /> F:{meal.recipe.nutrition.fat}g</span>
+                  <span className="macro-pill text-sm px-4 py-1.5"><span className="dot bg-blue-500 w-2 h-2" /> <span className="text-slate-400 mr-1">Carbs</span><span className="text-white font-medium">{meal.recipe.nutrition.carbs}g</span></span>
+                  <span className="macro-pill text-sm px-4 py-1.5"><span className="dot bg-emerald-500 w-2 h-2" /> <span className="text-slate-400 mr-1">Protein</span><span className="text-white font-medium">{meal.recipe.nutrition.protein}g</span></span>
+                  <span className="macro-pill text-sm px-4 py-1.5"><span className="dot bg-amber-500 w-2 h-2" /> <span className="text-slate-400 mr-1">Fat</span><span className="text-white font-medium">{meal.recipe.nutrition.fat}g</span></span>
                 </div>
 
-                <div className="flex flex-wrap justify-center gap-2.5">
+                <div className="flex flex-wrap justify-center gap-3">
                   {meal.recipe.tags.slice(0, 3).map((t, j) => (
-                    <span key={j} className="tag">{t}</span>
+                    <span key={j} className="tag bg-white/[0.03] border-white/[0.05]">{t}</span>
                   ))}
-                  <span className="tag flex items-center gap-1.5">
-                    <ChefHat className="w-3.5 h-3.5" /> {meal.recipe.cookingTime} min
+                  <span className="tag flex items-center gap-2 bg-white/[0.03] border-white/[0.05]">
+                    <ChefHat className="w-4 h-4" /> {meal.recipe.cookingTime} min
                   </span>
                 </div>
               </div>
@@ -163,79 +163,85 @@ export default function Dashboard({ profile, mealPlanData, onRegenerate }) {
           ))}
         </div>
 
-        {/* Right sidebar */}
-        <div className="lg:col-span-2 space-y-6">
+        {/* Daily Progress & Macros (Side-by-side or stacked on mobile) */}
+        <div className="w-full max-w-4xl grid sm:grid-cols-2 gap-8">
           {/* Calorie ring */}
-          <div className="glass-elevated p-8 text-center flex flex-col items-center">
-            <div className="section-label mb-6">DAILY PROGRESS</div>
-            <div className="flex flex-col items-center gap-5">
-              <div className="relative w-32 h-32 shrink-0">
+          <div className="glass-elevated p-8 sm:p-10 text-center flex flex-col items-center justify-center">
+            <div className="section-label mb-8 text-lg">DAILY PROGRESS</div>
+            <div className="flex flex-col items-center gap-6">
+              <div className="relative w-40 h-40 shrink-0">
                 <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
                   <circle cx="18" cy="18" r="15" fill="none" stroke="rgba(148,163,184,0.05)" strokeWidth="3" />
                   <circle cx="18" cy="18" r="15" fill="none" stroke="#10b981" strokeWidth="3"
                     strokeDasharray={`${calPct} ${100 - calPct}`} strokeLinecap="round"
                     style={{ transition: 'stroke-dasharray 0.8s ease' }} />
                 </svg>
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="text-2xl font-bold text-white">{Math.round(calPct)}%</span>
+                <div className="absolute inset-0 flex flex-col items-center justify-center mt-1">
+                  <span className="text-3xl font-bold text-white leading-none">{Math.round(calPct)}%</span>
+                  <span className="text-xs text-slate-500 mt-1 uppercase tracking-wider">Target</span>
                 </div>
               </div>
-              <div>
-                <div className="text-4xl font-bold text-white mb-2">{summary.calories || 0}</div>
-                <div className="text-base text-slate-400 mb-2">of {metrics.targetCalories} kcal</div>
-                <div className="text-sm text-slate-500 font-medium">
-                  {(summary.calories || 0) > metrics.targetCalories ? '⚠ Over target' : `${metrics.targetCalories - (summary.calories || 0)} remaining`}
+              <div className="mt-2">
+                <div className="text-4xl sm:text-5xl font-extrabold text-white mb-2">{summary.calories || 0}</div>
+                <div className="text-lg text-slate-400 mb-2">of {metrics.targetCalories} kcal</div>
+                <div className="text-sm px-4 py-1.5 rounded-lg bg-white/[0.03] inline-block text-slate-400 font-medium border border-white/[0.05]">
+                  {(summary.calories || 0) > metrics.targetCalories ? <span className="text-rose-400">⚠ Over target</span> : <>{metrics.targetCalories - (summary.calories || 0)} <span className="text-slate-500">remaining</span></>}
                 </div>
               </div>
             </div>
           </div>
 
           {/* Macro donut */}
-          <div className="glass-elevated p-8 text-center flex flex-col items-center">
-            <div className="section-label mb-6">MACRO SPLIT</div>
-            <div className="chart-container w-full" style={{ height: '200px' }}>
+          <div className="glass-elevated p-8 sm:p-10 text-center flex flex-col items-center justify-center">
+            <div className="section-label mb-8 text-lg">MACRO SPLIT</div>
+            <div className="chart-container w-full max-w-[240px]" style={{ height: '220px' }}>
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie data={macroData} innerRadius="55%" outerRadius="80%" paddingAngle={4} dataKey="value" strokeWidth={0}>
+                  <Pie data={macroData} innerRadius="60%" outerRadius="85%" paddingAngle={5} dataKey="value" strokeWidth={0}>
                     {macroData.map((e, i) => <Cell key={i} fill={e.color} />)}
                   </Pie>
                 </PieChart>
               </ResponsiveContainer>
             </div>
-            <div className="flex justify-around mt-6 w-full">
+            <div className="grid grid-cols-3 w-full mt-8 gap-2">
               {macroData.map((m, i) => (
-                <div key={i} className="text-center">
-                  <div className="flex items-center justify-center gap-2 mb-2">
+                <div key={i} className="text-center p-3 rounded-2xl bg-white/[0.02]">
+                  <div className="flex items-center justify-center gap-1.5 mb-2">
                     <div className="w-2.5 h-2.5 rounded-full" style={{ background: m.color }} />
-                    <span className="text-xs text-slate-400 uppercase font-medium">{m.name}</span>
+                    <span className="text-xs text-slate-400 uppercase font-medium tracking-wider">{m.name}</span>
                   </div>
-                  <div className="text-xl font-bold text-white leading-none mb-1.5">{m.value}%</div>
-                  <div className="text-sm text-slate-500">{m.grams}g</div>
+                  <div className="text-xl font-bold text-white leading-none mb-1">{m.value}%</div>
+                  <div className="text-xs text-slate-500">{m.grams}g</div>
                 </div>
               ))}
             </div>
           </div>
+        </div>
 
+        {/* Nutrients & Insights */}
+        <div className="w-full max-w-4xl space-y-8">
           {/* Nutrients */}
-          <div className="glass-elevated p-8 text-center">
-            <div className="section-label mb-6">KEY NUTRIENTS</div>
-            <div className="space-y-5">
+          <div className="glass-elevated p-8 sm:p-12 text-center">
+            <div className="section-label mb-8 text-lg">KEY NUTRIENTS</div>
+            <div className="space-y-6 max-w-2xl mx-auto">
               {[
                 { label: 'Fiber', value: summary.fiber, target: metrics.macroDistribution?.fiberMin || 25, unit: 'g', color: 'bg-green-500' },
-                { label: 'Sodium', value: summary.sodium, target: metrics.sodiumLimit || 2300, unit: 'mg', color: (summary.sodium || 0) > (metrics.sodiumLimit || 2300) ? 'bg-red-500' : 'bg-blue-500' },
+                { label: 'Sodium', value: summary.sodium, target: metrics.sodiumLimit || 2300, unit: 'mg', color: (summary.sodium || 0) > (metrics.sodiumLimit || 2300) ? 'bg-rose-500' : 'bg-blue-500' },
                 { label: 'Potassium', value: summary.potassium, target: 4700, unit: 'mg', color: 'bg-purple-500' },
                 { label: 'Calcium', value: summary.calcium, target: 1000, unit: 'mg', color: 'bg-cyan-500' },
                 { label: 'Iron', value: summary.iron, target: 18, unit: 'mg', color: 'bg-orange-500' },
               ].map((n, i) => (
                 <div key={i}>
-                  <div className="flex justify-between text-base mb-2 px-1">
-                    <span className="text-slate-400">{n.label}</span>
-                    <span className="text-white tabular-nums font-semibold">
-                      {Math.round(n.value || 0)}<span className="text-slate-500 font-normal">/{n.target}{n.unit}</span>
+                  <div className="flex justify-between text-base sm:text-lg mb-2.5 px-1">
+                    <span className="text-slate-400 font-medium">{n.label}</span>
+                    <span className="text-white tabular-nums font-bold">
+                      {Math.round(n.value || 0)} <span className="text-slate-500 font-normal text-sm">/ {n.target}{n.unit}</span>
                     </span>
                   </div>
-                  <div className="nutrition-bar">
-                    <div className={`nutrition-bar-fill ${n.color}`} style={{ width: `${Math.min(100, ((n.value || 0) / n.target) * 100)}%` }} />
+                  <div className="nutrition-bar h-2.5 bg-slate-800 border border-white/[0.02]">
+                    <div className={`nutrition-bar-fill ${n.color} relative`} style={{ width: `${Math.min(100, ((n.value || 0) / n.target) * 100)}%` }}>
+                      <div className="absolute top-0 bottom-0 right-0 w-8 bg-gradient-to-l from-white/20 to-transparent" />
+                    </div>
                   </div>
                 </div>
               ))}
@@ -244,15 +250,17 @@ export default function Dashboard({ profile, mealPlanData, onRegenerate }) {
 
           {/* Insights */}
           {feedback.length > 0 && (
-            <div className="glass-elevated p-8 text-center flex flex-col items-center">
-              <div className="section-label mb-5 flex items-center justify-center gap-2">
+            <div className="glass-elevated p-8 sm:p-12 text-center flex flex-col items-center">
+              <div className="section-label mb-8 flex items-center justify-center gap-2 text-lg">
                 <Zap className="w-5 h-5 text-primary" /> INSIGHTS
               </div>
-              <div className="space-y-3 w-full">
+              <div className="space-y-4 w-full max-w-2xl">
                 {feedback.map((a, i) => (
-                  <div key={i} className={`flex flex-col items-center text-center gap-2 p-4 rounded-xl border text-sm leading-relaxed ${alertStyle(a.type)}`}>
-                    {alertIcon(a.type)}
-                    <span>{a.message}</span>
+                  <div key={i} className={`flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 p-5 sm:p-6 rounded-2xl border text-base leading-relaxed ${alertStyle(a.type)}`}>
+                    <div className="p-2 rounded-xl bg-white/[0.05] shrink-0">
+                      {alertIcon(a.type)}
+                    </div>
+                    <span className="mt-1">{a.message}</span>
                   </div>
                 ))}
               </div>
@@ -262,18 +270,18 @@ export default function Dashboard({ profile, mealPlanData, onRegenerate }) {
       </div>
 
       {/* Weekly chart */}
-      <div className="glass-elevated p-8 mt-8 text-center flex flex-col items-center">
-        <div className="section-label mb-6 flex items-center justify-center gap-2">
+      <div className="w-full max-w-4xl glass-elevated p-8 sm:p-12 mb-10 text-center flex flex-col items-center mx-auto">
+        <div className="section-label mb-8 flex items-center justify-center gap-2 text-lg">
           <TrendingUp className="w-5 h-5 text-primary" /> WEEKLY CALORIES
         </div>
-        <div className="chart-container w-full" style={{ height: '260px' }}>
+        <div className="chart-container w-full" style={{ height: '300px' }}>
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={weeklyCalories} barSize={24}>
+            <BarChart data={weeklyCalories} barSize={32}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.04)" vertical={false} />
-              <XAxis dataKey="name" tick={{ fill: '#475569', fontSize: 12 }} axisLine={false} tickLine={false} dy={8} />
-              <YAxis tick={{ fill: '#475569', fontSize: 12 }} axisLine={false} tickLine={false} width={40} dx={-8} />
+              <XAxis dataKey="name" tick={{ fill: '#475569', fontSize: 13, fontWeight: 500 }} axisLine={false} tickLine={false} dy={10} />
+              <YAxis tick={{ fill: '#475569', fontSize: 13 }} axisLine={false} tickLine={false} width={45} dx={-10} />
               <Tooltip {...tooltipStyle} cursor={{ fill: 'rgba(16,185,129,0.03)' }} />
-              <Bar dataKey="calories" fill="url(#bGrad)" radius={[8, 8, 0, 0]} />
+              <Bar dataKey="calories" fill="url(#bGrad)" radius={[10, 10, 0, 0]} />
               <defs>
                 <linearGradient id="bGrad" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stopColor="#10b981" />
