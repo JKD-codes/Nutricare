@@ -61,8 +61,8 @@ export default function Landing() {
               <Droplets className="w-5 h-5 text-white" />
             </div>
             <div>
-              <span className="text-lg font-bold text-white">NutriCare<span className="text-primary">AI</span></span>
-              <div className="text-[0.55rem] text-slate-600 font-medium tracking-widest uppercase">PERSONALIZED NUTRITION</div>
+              <span className="text-lg font-bold text-white">NutriCare</span>
+              <div className="text-[0.55rem] text-slate-600 font-medium tracking-widest uppercase">SMART NUTRITION</div>
             </div>
           </div>
           <button onClick={() => navigate('/onboarding')} className="btn-primary text-sm py-2.5 px-5">
@@ -71,22 +71,20 @@ export default function Landing() {
         </nav>
 
         {/* Hero */}
-        <div className="text-center max-w-4xl mx-auto px-5 sm:px-8 pt-12 sm:pt-20 pb-16 sm:pb-24 animate-fade-in-up">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/[0.06] border border-primary/10 text-primary text-xs sm:text-sm font-medium mb-8">
+        <div className="text-center max-w-4xl mx-auto px-5 sm:px-8 pt-12 sm:pt-20 pb-14 sm:pb-20 animate-fade-in-up">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/[0.06] border border-primary/10 text-primary text-xs sm:text-sm font-medium mb-6">
             <Sparkles className="w-3.5 h-3.5" />
-            AI-Powered Nutrition for Chronic Disease
+            Science-Backed Nutrition Plans
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-white leading-[1.1] mb-6 tracking-tight">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-[1.1] mb-5 tracking-tight">
             Your Personalized
             <br />
             <span className="gradient-text">Diet Planner</span>
           </h1>
 
-          <p className="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Clinically-informed meal plans tailored to your condition.
-            Manage <strong className="text-slate-200">PCOS</strong>, <strong className="text-slate-200">Diabetes</strong>, or <strong className="text-slate-200">Hypertension</strong> with
-            science-backed nutrition.
+          <p className="text-sm sm:text-base text-slate-400 max-w-xl mx-auto mb-8 leading-relaxed">
+            Clinically-informed meal plans tailored to your condition — manage <strong className="text-slate-200">PCOS</strong>, <strong className="text-slate-200">Diabetes</strong>, or <strong className="text-slate-200">Hypertension</strong> with evidence-based nutrition.
           </p>
 
           <button
@@ -202,7 +200,7 @@ export default function Landing() {
           <div className="max-w-6xl mx-auto px-5 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2 text-slate-600 text-xs">
               <Droplets className="w-3.5 h-3.5 text-primary" />
-              NutriCareAI — Evidence-based nutrition for chronic disease
+              NutriCare — Evidence-based nutrition for chronic disease
             </div>
             <div className="text-slate-700 text-xs">
               Built for health. Powered by science.
