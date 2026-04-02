@@ -328,3 +328,33 @@ select {
 .stagger-2 { animation-delay: 0.16s; }
 .stagger-3 { animation-delay: 0.24s; }
 .stagger-4 { animation-delay: 0.32s; }
+
+/* ===== PRINT STYLES ===== */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .lg-sidebar, .mobile-topbar, button, .no-print {
+    display: none !important;
+  }
+  .glass-elevated, .stat-card, .meal-card {
+    background: transparent !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: none !important;
+    color: black !important;
+    page-break-inside: avoid;
+  }
+  h1, h2, h3, h4, span, div, p {
+    color: black !important;
+  }
+  .tag {
+    border: 1px solid #cbd5e1 !important;
+    color: #475569 !important;
+  }
+  .main-content {
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+}

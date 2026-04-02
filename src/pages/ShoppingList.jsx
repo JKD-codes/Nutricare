@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ShoppingCart, Check, Package, Carrot, Wheat, Milk, Nut, Leaf, Coffee } from 'lucide-react';
+import { ShoppingCart, Check, Package, Carrot, Wheat, Milk, Nut, Leaf, Coffee, Copy } from 'lucide-react';
 
 const catIcons = { protein: Package, dairy: Milk, grain: Wheat, produce: Carrot, pantry: Nut, legume: Leaf, beverage: Coffee, other: ShoppingCart };
 const catLabels = { protein: 'Protein', dairy: 'Dairy', grain: 'Grains & Starches', produce: 'Fruits & Vegetables', pantry: 'Nuts, Seeds & Pantry', legume: 'Legumes & Beans', beverage: 'Beverages', other: 'Other' };
@@ -16,6 +16,8 @@ const catColorMap = {
 
 export default function ShoppingList({ mealPlanData }) {
   const [checked, setChecked] = useState({});
+  const [copied, setCopied] = useState(false);
+  
   const shoppingList = mealPlanData?.shoppingList || {};
   const toggle = (key) => setChecked(p => ({ ...p, [key]: !p[key] }));
 
@@ -24,16 +26,42 @@ export default function ShoppingList({ mealPlanData }) {
   const order = ['produce', 'protein', 'legume', 'grain', 'dairy', 'pantry', 'beverage', 'other'];
   const sorted = order.filter(c => shoppingList[c]?.length > 0);
 
+  const handleCopy = () => {
+    let text = "🛒 NutriCare Shopping List\n\n";
+    sorted.forEach(cat => {
+      text += `--- ${catLabels[cat]} ---\n`;
+      shoppingList[cat].forEach((item, i) => {
+        const isChecked = checked[`${cat}-${i}`];
+        text += `${isChecked ? '[x]' : '[ ]'} ${item.name} (${item.amount}${item.unit})\n`;
+      });
+      text += '\n';
+    });
+    
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
     <div style={{ padding: '24px 20px', maxWidth: 1100, margin: '0 auto' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 16, marginBottom: 32 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 16, marginBottom: 32, position: 'relative' }}>
         <div>
           <h1 style={{ fontSize: 'clamp(1.75rem, 3vw, 2.25rem)', fontWeight: 700, color: 'white', lineHeight: 1.2, marginBottom: 8 }}>Shopping List</h1>
           <p style={{ fontSize: '1rem', color: '#64748b' }}>Weekly ingredients</p>
         </div>
-        <div className="stat-card" style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 20px', fontSize: '0.875rem' }}>
-          <span style={{ color: '#10b981', fontWeight: 700, fontSize: '1.125rem' }}>{checkedCount}</span>
-          <span style={{ color: '#64748b' }}>of {totalItems} items collected</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div className="stat-card" style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 16px', fontSize: '0.875rem' }}>
+            <span style={{ color: '#10b981', fontWeight: 700, fontSize: '1.125rem' }}>{checkedCount}</span>
+            <span style={{ color: '#64748b' }}>of {totalItems} items</span>
+          </div>
+          <button 
+            onClick={handleCopy}
+            className="btn-secondary no-print" 
+            style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px', fontSize: '0.8125rem' }}
+          >
+            {copied ? <Check style={{ width: 14, height: 14, color: '#10b981' }} /> : <Copy style={{ width: 14, height: 14 }} />}
+            {copied ? 'Copied' : 'Copy'}
+          </button>
         </div>
       </div>
 

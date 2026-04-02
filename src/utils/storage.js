@@ -7,6 +7,7 @@ const KEYS = {
   RATINGS: 'dietplanner_ratings',
   METRICS: 'dietplanner_metrics',
   ONBOARDED: 'dietplanner_onboarded',
+  DAILY_LOG: 'dietplanner_dailylog',
 };
 
 const safeGet = (key) => {
@@ -63,6 +64,18 @@ export const getMetrics = () => safeGet(KEYS.METRICS);
 // Onboarding state
 export const isOnboarded = () => safeGet(KEYS.ONBOARDED) === true;
 export const setOnboarded = (val) => safeSet(KEYS.ONBOARDED, val);
+
+// Daily Log (water, vitals)
+const todayKey = () => new Date().toISOString().slice(0, 10);
+export const getDailyLog = () => {
+  const all = safeGet(KEYS.DAILY_LOG) || {};
+  return all[todayKey()] || { water: 0, weight: '', bp: '', sugar: '' };
+};
+export const saveDailyLog = (log) => {
+  const all = safeGet(KEYS.DAILY_LOG) || {};
+  all[todayKey()] = log;
+  safeSet(KEYS.DAILY_LOG, all);
+};
 
 // Reset everything
 export const resetAll = () => {

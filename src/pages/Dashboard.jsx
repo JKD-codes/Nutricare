@@ -1,9 +1,9 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
-import { Flame, Droplets, Zap, ChefHat, Clock, RefreshCw, AlertTriangle, CheckCircle, Info, ArrowRight, TrendingUp, Salad } from 'lucide-react';
-import { generateMealPlan, generateFeedback } from '../utils/mealPlanner';
-import { saveMealPlan } from '../utils/storage';
+import { Flame, Droplets, Zap, ChefHat, Clock, RefreshCw, AlertTriangle, CheckCircle, Info, ArrowRight, TrendingUp, Salad, Plus, Minus, Printer } from 'lucide-react';
+import { generateMealPlan, generateFeedback, swapMeal } from '../utils/mealPlanner';
+import { saveMealPlan, getDailyLog, saveDailyLog } from '../utils/storage';
 
 const MACRO_COLORS = { carbs: '#3b82f6', protein: '#10b981', fat: '#f59e0b' };
 const DAY_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -14,6 +14,13 @@ const MEAL_LABELS = { breakfast: 'Breakfast', lunch: 'Lunch', dinner: 'Dinner', 
 export default function Dashboard({ profile, mealPlanData, onRegenerate }) {
   const navigate = useNavigate();
   const [selectedDay, setSelectedDay] = useState(0);
+  const [dailyLog, setDailyLog] = useState(() => getDailyLog());
+
+  const updateLog = (field, value) => {
+    const newLog = { ...dailyLog, [field]: value };
+    setDailyLog(newLog);
+    saveDailyLog(newLog);
+  };
 
   const plan = mealPlanData?.plan || [];
   const metrics = mealPlanData?.metrics || {};
@@ -124,6 +131,63 @@ export default function Dashboard({ profile, mealPlanData, onRegenerate }) {
         ))}
       </div>
 
+      {/* Daily Tracker Section */}
+      <div className="glass-elevated" style={{ margin: '0 auto 40px', padding: '32px 24px', textAlign: 'center' }}>
+        <div style={{ ...sectionLabel, marginBottom: 24, fontSize: '0.875rem' }}>TODAY'S VITALS & WATER</div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 32 }}>
+          {/* Water */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{ fontSize: '0.875rem', color: '#94a3b8', marginBottom: 12 }}>Water Intake ({dailyLog.water}/8 glasses)</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <button 
+                onClick={() => updateLog('water', Math.max(0, dailyLog.water - 1))}
+                style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(255,255,255,0.05)', border: 'none', color: '#cbd5e1', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Minus style={{ width: 16, height: 16 }} />
+              </button>
+              <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#3b82f6', width: 40, textAlign: 'center' }}>{dailyLog.water}</div>
+              <button 
+                onClick={() => updateLog('water', Math.min(15, dailyLog.water + 1))}
+                style={{ width: 36, height: 36, borderRadius: '50%', background: 'rgba(59,130,246,0.1)', border: 'none', color: '#60a5fa', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Plus style={{ width: 16, height: 16 }} />
+              </button>
+            </div>
+            <div style={{ display: 'flex', gap: 4, marginTop: 12 }}>
+              {[...Array(8)].map((_, i) => (
+                <div key={i} style={{ width: 12, height: 12, borderRadius: '50%', background: i < dailyLog.water ? '#3b82f6' : 'rgba(255,255,255,0.05)' }} />
+              ))}
+            </div>
+          </div>
+
+          {/* Vitals */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', gap: 16 }}>
+            <div>
+              <div style={{ fontSize: '0.875rem', color: '#94a3b8', marginBottom: 6 }}>Weight (kg)</div>
+              <input 
+                type="number" 
+                value={dailyLog.weight} 
+                onChange={e => updateLog('weight', e.target.value)}
+                placeholder="e.g. 70.5"
+                style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)', padding: '8px 16px', borderRadius: 8, color: 'white', width: 120, textAlign: 'center' }}
+              />
+            </div>
+            {mealPlanData?.condition !== 'PCOS' && (
+              <div>
+                <div style={{ fontSize: '0.875rem', color: '#94a3b8', marginBottom: 6 }}>
+                  {mealPlanData?.condition === 'Diabetes' ? 'Fasting Sugar (mg/dL)' : 'Blood Pressure'}
+                </div>
+                <input 
+                  type="text" 
+                  value={mealPlanData?.condition === 'Diabetes' ? dailyLog.sugar : dailyLog.bp} 
+                  onChange={e => updateLog(mealPlanData?.condition === 'Diabetes' ? 'sugar' : 'bp', e.target.value)}
+                  placeholder={mealPlanData?.condition === 'Diabetes' ? "e.g. 110" : "e.g. 120/80"}
+                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)', padding: '8px 16px', borderRadius: 8, color: 'white', width: 140, textAlign: 'center' }}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
       {/* Main content */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', gap: 48 }}>
         {/* Meals */}
@@ -136,7 +200,7 @@ export default function Dashboard({ profile, mealPlanData, onRegenerate }) {
               onClick={() => navigate(`/meal/${selectedDay}/${idx}`)}
               className="meal-card"
               style={{
-                width: '100%', textAlign: 'center',
+                width: '100%', textAlign: 'center', position: 'relative',
                 display: 'flex', flexDirection: 'column', alignItems: 'center',
                 border: '1px solid rgba(148,163,184,0.04)',
                 cursor: 'pointer', background: 'rgba(15,23,42,0.4)',
@@ -154,6 +218,21 @@ export default function Dashboard({ profile, mealPlanData, onRegenerate }) {
               <h3 style={{ color: 'white', fontWeight: 700, fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)', lineHeight: 1.3, marginBottom: 20, padding: '0 16px', transition: 'color 0.2s' }}>
                 {meal.recipe.name}
               </h3>
+
+              <div style={{ position: 'absolute', top: 16, right: 16 }}>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const newPlan = swapMeal(mealPlanData, selectedDay, idx, profile);
+                    saveMealPlan(newPlan);
+                    onRegenerate(newPlan);
+                  }}
+                  className="btn-secondary"
+                  style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 12px', fontSize: '0.75rem', background: 'rgba(255,255,255,0.05)' }}
+                >
+                  <RefreshCw style={{ width: 12, height: 12 }} /> Swap
+                </button>
+              </div>
 
               <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: 16, marginBottom: 20 }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '1rem' }}>

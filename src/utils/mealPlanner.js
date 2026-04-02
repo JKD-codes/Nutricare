@@ -363,3 +363,54 @@ export const generateFeedback = (daySummary, metrics, condition) => {
 
   return alerts;
 };
+
+/**
+ * Swap a specific meal for an alternative from the filtered recipe list.
+ * Updates the plan's daily summary and shopping list accordingly.
+ */
+export const swapMeal = (mealPlanData, dayIndex, mealIndex, profile) => {
+  const plan = [...mealPlanData.plan];
+  const day = { ...plan[dayIndex], meals: [...plan[dayIndex].meals] };
+  const mealToSwap = day.meals[mealIndex];
+  
+  // Get all valid recipes for their condition & filters
+  let candidates = getRecipesByCondition(profile.health.primaryCondition);
+  candidates = filterRecipes(candidates, profile);
+  // Filter specifically for this meal type
+  candidates = candidates.filter(r => r.category === mealToSwap.type);
+  
+  // Exclude the current recipe and sort by calorie closeness to target
+  const diffCandidates = candidates
+    .filter(r => r.id !== mealToSwap.recipe.id)
+    .map(r => ({
+      recipe: r,
+      diff: Math.abs(r.nutrition.calories - mealToSwap.targetCalories)
+    }))
+    .sort((a, b) => a.diff - b.diff);
+
+  if (diffCandidates.length > 0) {
+    // Pick something relatively close (randomly pick one from top 3)
+    const top = diffCandidates.slice(0, Math.min(3, diffCandidates.length));
+    const newRecipe = top[Math.floor(Math.random() * top.length)].recipe;
+    
+    // Replace meal
+    day.meals[mealIndex] = { ...mealToSwap, recipe: newRecipe };
+    day.summary = calculateDaySummary(day.meals);
+    plan[dayIndex] = day;
+
+    // Recalculate shopping list
+    const allIngredients = {};
+    plan.forEach(d => {
+      d.meals.forEach(m => aggregateIngredients(allIngredients, m.recipe));
+    });
+    const shoppingList = generateShoppingList(allIngredients);
+
+    return {
+      ...mealPlanData,
+      plan,
+      shoppingList
+    };
+  }
+
+  return mealPlanData; // If no alternative found
+};

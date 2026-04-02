@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend } from 'recharts';
-import { TrendingUp, Target, Award, Flame, Droplets, Zap, Heart, Activity } from 'lucide-react';
+import { TrendingUp, Target, Award, Flame, Droplets, Zap, Heart, Activity, Printer } from 'lucide-react';
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const tt = { contentStyle: { background: '#1e293b', border: '1px solid rgba(148,163,184,0.06)', borderRadius: 10, color: '#e2e8f0', fontSize: 10, padding: '6px 10px' } };
@@ -60,9 +60,18 @@ export default function WeeklyReport({ mealPlanData, profile }) {
 
   return (
     <div style={{ padding: '24px 20px', maxWidth: 1100, margin: '0 auto' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 12, marginBottom: 40 }}>
-        <h1 style={{ fontSize: 'clamp(1.75rem, 3vw, 2.25rem)', fontWeight: 700, color: 'white', lineHeight: 1.2 }}>Weekly Report</h1>
-        <p style={{ fontSize: '1rem', color: '#94a3b8' }}>Your nutrition performance snapshot</p>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 16, marginBottom: 40, position: 'relative' }}>
+        <div>
+          <h1 style={{ fontSize: 'clamp(1.75rem, 3vw, 2.25rem)', fontWeight: 700, color: 'white', lineHeight: 1.2, marginBottom: 8 }}>Weekly Report</h1>
+          <p style={{ fontSize: '1rem', color: '#94a3b8' }}>Your nutrition performance snapshot</p>
+        </div>
+        <button 
+          onClick={() => window.print()}
+          className="btn-secondary no-print" 
+          style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 16px', fontSize: '0.8125rem' }}
+        >
+          <Printer style={{ width: 14, height: 14 }} /> Export as PDF
+        </button>
       </div>
 
       {/* Stats */}
