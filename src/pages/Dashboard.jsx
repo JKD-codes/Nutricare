@@ -48,153 +48,184 @@ export default function Dashboard({ profile, mealPlanData, onRegenerate }) {
   const calPct = Math.min(100, ((summary.calories || 0) / (metrics.targetCalories || 1)) * 100);
 
   const alertStyle = (t) => ({
-    danger: 'bg-red-500/[0.06] border-red-500/10 text-red-400',
-    warning: 'bg-amber-500/[0.06] border-amber-500/10 text-amber-400',
-    success: 'bg-emerald-500/[0.06] border-emerald-500/10 text-emerald-400',
-  }[t] || 'bg-blue-500/[0.06] border-blue-500/10 text-blue-400');
+    danger: { bg: 'rgba(239,68,68,0.06)', border: 'rgba(239,68,68,0.1)', color: '#f87171' },
+    warning: { bg: 'rgba(245,158,11,0.06)', border: 'rgba(245,158,11,0.1)', color: '#fbbf24' },
+    success: { bg: 'rgba(16,185,129,0.06)', border: 'rgba(16,185,129,0.1)', color: '#34d399' },
+  }[t] || { bg: 'rgba(59,130,246,0.06)', border: 'rgba(59,130,246,0.1)', color: '#60a5fa' });
 
   const alertIcon = (t) => ({
-    danger: <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />,
-    warning: <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />,
-    success: <CheckCircle className="w-4 h-4 shrink-0 mt-0.5" />,
-  }[t] || <Info className="w-4 h-4 shrink-0 mt-0.5" />);
+    danger: <AlertTriangle style={{ width: 16, height: 16, flexShrink: 0, marginTop: 2 }} />,
+    warning: <AlertTriangle style={{ width: 16, height: 16, flexShrink: 0, marginTop: 2 }} />,
+    success: <CheckCircle style={{ width: 16, height: 16, flexShrink: 0, marginTop: 2 }} />,
+  }[t] || <Info style={{ width: 16, height: 16, flexShrink: 0, marginTop: 2 }} />);
 
   const tooltipStyle = {
-    contentStyle: { background: '#1e293b', border: '1px solid rgba(148,163,184,0.08)', borderRadius: '12px', color: '#e2e8f0', fontSize: '13px', padding: '10px 14px' }
+    contentStyle: { background: '#1e293b', border: '1px solid rgba(148,163,184,0.08)', borderRadius: 12, color: '#e2e8f0', fontSize: 13, padding: '10px 14px' }
   };
 
+  const sectionLabel = { fontSize: '0.6875rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#475569' };
+
   return (
-    <div className="page-container">
+    <div style={{ padding: '24px 20px', maxWidth: 1100, margin: '0 auto' }}>
       {/* Header */}
-      <div className="flex flex-col items-center justify-center text-center gap-5 mb-10 w-full">
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', gap: 20, marginBottom: 40 }}>
         <div>
-          <h1 className="text-3xl sm:text-4xl font-bold text-white leading-tight mb-3">Your Meal Plan</h1>
-          <p className="text-base text-slate-400">
-            <span className="text-primary font-semibold">{metrics.targetCalories}</span> kcal/day · {mealPlanData?.condition} focused
+          <h1 style={{ fontSize: 'clamp(1.75rem, 3vw, 2.25rem)', fontWeight: 700, color: 'white', lineHeight: 1.2, marginBottom: 12 }}>Your Meal Plan</h1>
+          <p style={{ fontSize: '1rem', color: '#94a3b8' }}>
+            <span style={{ color: '#10b981', fontWeight: 600 }}>{metrics.targetCalories}</span> kcal/day · {mealPlanData?.condition} focused
           </p>
         </div>
-        <button onClick={handleRegenerate} className="btn-secondary text-sm py-2.5 px-6 shrink-0 mt-2">
-          <RefreshCw className="w-4 h-4" /> Generate New Plan
+        <button onClick={handleRegenerate} className="btn-secondary" style={{ fontSize: '0.875rem', padding: '10px 24px' }}>
+          <RefreshCw style={{ width: 16, height: 16 }} /> Generate New Plan
         </button>
       </div>
 
       {/* Day selector */}
-      <div className="flex justify-center gap-2 sm:gap-3 mb-10 overflow-x-auto scrollbar-hide -mx-2 px-2 pb-2">
+      <div style={{
+        display: 'flex', justifyContent: 'center', gap: 8, marginBottom: 40,
+        overflowX: 'auto', paddingBottom: 8,
+      }}>
         {DAY_NAMES.map((day, i) => (
           <button
             key={i}
             onClick={() => setSelectedDay(i)}
-            className={`px-5 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-all shrink-0 ${
-              selectedDay === i
-                ? 'bg-primary text-white shadow-lg shadow-primary/20'
-                : 'bg-white/[0.03] text-slate-400 border border-white/[0.05] hover:text-slate-200 hover:bg-white/[0.06]'
-            }`}
+            style={{
+              padding: '10px 20px', borderRadius: 12,
+              fontSize: '0.875rem', fontWeight: 500, whiteSpace: 'nowrap', flexShrink: 0,
+              border: selectedDay === i ? 'none' : '1px solid rgba(255,255,255,0.05)',
+              background: selectedDay === i ? '#10b981' : 'rgba(255,255,255,0.03)',
+              color: selectedDay === i ? 'white' : '#94a3b8',
+              cursor: 'pointer', transition: 'all 0.2s',
+              boxShadow: selectedDay === i ? '0 4px 16px rgba(16,185,129,0.2)' : 'none',
+            }}
           >
-            <span className="sm:hidden">{DAY_SHORT[i]}</span>
-            <span className="hidden sm:inline">{day}</span>
+            <span className="day-short">{DAY_SHORT[i]}</span>
+            <span className="day-full">{day}</span>
           </button>
         ))}
       </div>
 
       {/* Stats row */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 16, marginBottom: 32 }}>
         {[
-          { label: 'Calories', value: summary.calories || 0, sub: `/ ${metrics.targetCalories}`, icon: Flame, color: 'text-orange-400' },
-          { label: 'Protein', value: `${summary.protein || 0}g`, sub: `${summary.macroPercentages?.protein || 0}%`, icon: Zap, color: 'text-emerald-400' },
-          { label: 'Fiber', value: `${Math.round(summary.fiber || 0)}g`, sub: `/ ${metrics.macroDistribution?.fiberMin || 25}g`, icon: Salad, color: 'text-green-400' },
-          { label: 'Sodium', value: `${Math.round(summary.sodium || 0)}`, sub: `/ ${metrics.sodiumLimit || 2300}mg`, icon: Droplets, color: 'text-blue-400' },
+          { label: 'Calories', value: summary.calories || 0, sub: `/ ${metrics.targetCalories}`, icon: Flame, color: '#fb923c' },
+          { label: 'Protein', value: `${summary.protein || 0}g`, sub: `${summary.macroPercentages?.protein || 0}%`, icon: Zap, color: '#34d399' },
+          { label: 'Fiber', value: `${Math.round(summary.fiber || 0)}g`, sub: `/ ${metrics.macroDistribution?.fiberMin || 25}g`, icon: Salad, color: '#4ade80' },
+          { label: 'Sodium', value: `${Math.round(summary.sodium || 0)}`, sub: `/ ${metrics.sodiumLimit || 2300}mg`, icon: Droplets, color: '#60a5fa' },
         ].map((stat, i) => (
-          <div key={i} className="stat-card flex flex-col items-center text-center">
-            <div className="flex items-center gap-2 mb-3">
-              <stat.icon className={`w-4 h-4 ${stat.color}`} />
-              <span className="section-label">{stat.label}</span>
+          <div key={i} className="stat-card" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '20px 12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+              <stat.icon style={{ width: 16, height: 16, color: stat.color }} />
+              <span style={sectionLabel}>{stat.label}</span>
             </div>
-            <div className="text-3xl sm:text-4xl font-bold text-white mb-2">{stat.value}</div>
-            <div className="text-sm text-slate-500">{stat.sub}</div>
+            <div style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 700, color: 'white', marginBottom: 8 }}>{stat.value}</div>
+            <div style={{ fontSize: '0.875rem', color: '#64748b' }}>{stat.sub}</div>
           </div>
         ))}
       </div>
 
-      {/* Main content - Single Centered Column */}
-      <div className="flex flex-col items-center w-full space-y-12">
+      {/* Main content */}
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', gap: 48 }}>
         {/* Meals */}
-        <div className="w-full max-w-4xl space-y-5">
-          <div className="section-label mb-6 text-center text-lg">{DAY_NAMES[selectedDay]}'S MEALS</div>
+        <div style={{ width: '100%', maxWidth: 800, display: 'flex', flexDirection: 'column', gap: 20 }}>
+          <div style={{ ...sectionLabel, marginBottom: 8, textAlign: 'center', fontSize: '0.875rem' }}>{DAY_NAMES[selectedDay]}'S MEALS</div>
 
           {currentDay?.meals.map((meal, idx) => (
             <button
               key={idx}
               onClick={() => navigate(`/meal/${selectedDay}/${idx}`)}
-              className="w-full meal-card text-center group flex flex-col items-center"
+              className="meal-card"
+              style={{
+                width: '100%', textAlign: 'center',
+                display: 'flex', flexDirection: 'column', alignItems: 'center',
+                border: '1px solid rgba(148,163,184,0.04)',
+                cursor: 'pointer', background: 'rgba(15,23,42,0.4)',
+              }}
             >
-              <div className="text-5xl lg:text-6xl mb-5 shrink-0 transition-transform group-hover:scale-110 duration-300">{MEAL_ICONS[meal.type]}</div>
-              <div className="flex flex-col items-center w-full">
-                <div className="flex items-center justify-center gap-2 mb-4">
-                  <span className="tag tag-primary text-sm px-4 py-1.5">{MEAL_LABELS[meal.type]}</span>
-                  <span className="text-sm text-slate-500 flex items-center gap-1.5 font-medium">
-                    <Clock className="w-4 h-4" /> {meal.time}
-                  </span>
-                </div>
+              <div style={{ fontSize: 'clamp(2.5rem, 4vw, 3.5rem)', marginBottom: 20, transition: 'transform 0.3s' }}>{MEAL_ICONS[meal.type]}</div>
 
-                <h3 className="text-white font-bold text-2xl sm:text-3xl leading-snug mb-5 group-hover:text-primary transition-colors px-4">
-                  {meal.recipe.name}
-                </h3>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 16 }}>
+                <span className="tag tag-primary" style={{ fontSize: '0.875rem', padding: '6px 16px' }}>{MEAL_LABELS[meal.type]}</span>
+                <span style={{ fontSize: '0.875rem', color: '#64748b', display: 'flex', alignItems: 'center', gap: 6, fontWeight: 500 }}>
+                  <Clock style={{ width: 16, height: 16 }} /> {meal.time}
+                </span>
+              </div>
 
-                <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mb-5">
-                  <span className="macro-pill text-base px-4 py-1.5">
-                    <Flame className="w-5 h-5 text-orange-400" />
-                    <span className="text-white font-bold">{meal.recipe.nutrition.calories}</span> <span className="text-slate-400 text-sm">kcal</span>
-                  </span>
-                  <span className="macro-pill text-sm px-4 py-1.5"><span className="dot bg-blue-500 w-2 h-2" /> <span className="text-slate-400 mr-1">Carbs</span><span className="text-white font-medium">{meal.recipe.nutrition.carbs}g</span></span>
-                  <span className="macro-pill text-sm px-4 py-1.5"><span className="dot bg-emerald-500 w-2 h-2" /> <span className="text-slate-400 mr-1">Protein</span><span className="text-white font-medium">{meal.recipe.nutrition.protein}g</span></span>
-                  <span className="macro-pill text-sm px-4 py-1.5"><span className="dot bg-amber-500 w-2 h-2" /> <span className="text-slate-400 mr-1">Fat</span><span className="text-white font-medium">{meal.recipe.nutrition.fat}g</span></span>
-                </div>
+              <h3 style={{ color: 'white', fontWeight: 700, fontSize: 'clamp(1.25rem, 2.5vw, 1.75rem)', lineHeight: 1.3, marginBottom: 20, padding: '0 16px', transition: 'color 0.2s' }}>
+                {meal.recipe.name}
+              </h3>
 
-                <div className="flex flex-wrap justify-center gap-3">
-                  {meal.recipe.tags.slice(0, 3).map((t, j) => (
-                    <span key={j} className="tag bg-white/[0.03] border-white/[0.05]">{t}</span>
-                  ))}
-                  <span className="tag flex items-center gap-2 bg-white/[0.03] border-white/[0.05]">
-                    <ChefHat className="w-4 h-4" /> {meal.recipe.cookingTime} min
+              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: 16, marginBottom: 20 }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '1rem' }}>
+                  <Flame style={{ width: 20, height: 20, color: '#fb923c' }} />
+                  <span style={{ color: 'white', fontWeight: 700 }}>{meal.recipe.nutrition.calories}</span>
+                  <span style={{ color: '#94a3b8', fontSize: '0.875rem' }}>kcal</span>
+                </span>
+                {[
+                  { label: 'Carbs', val: meal.recipe.nutrition.carbs, color: '#3b82f6' },
+                  { label: 'Protein', val: meal.recipe.nutrition.protein, color: '#10b981' },
+                  { label: 'Fat', val: meal.recipe.nutrition.fat, color: '#f59e0b' },
+                ].map((m, j) => (
+                  <span key={j} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.875rem' }}>
+                    <span style={{ width: 8, height: 8, borderRadius: '50%', background: m.color }} />
+                    <span style={{ color: '#94a3b8' }}>{m.label}</span>
+                    <span style={{ color: 'white', fontWeight: 500 }}>{m.val}g</span>
                   </span>
-                </div>
+                ))}
+              </div>
+
+              <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 8 }}>
+                {meal.recipe.tags.slice(0, 3).map((t, j) => (
+                  <span key={j} className="tag" style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)' }}>{t}</span>
+                ))}
+                <span className="tag" style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)' }}>
+                  <ChefHat style={{ width: 14, height: 14 }} /> {meal.recipe.cookingTime} min
+                </span>
               </div>
             </button>
           ))}
         </div>
 
-        {/* Daily Progress & Macros (Side-by-side or stacked on mobile) */}
-        <div className="w-full max-w-4xl grid sm:grid-cols-2 gap-8">
+        {/* Daily Progress & Macros */}
+        <div style={{ width: '100%', maxWidth: 800, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 24 }}>
           {/* Calorie ring */}
-          <div className="glass-elevated p-8 sm:p-10 text-center flex flex-col items-center justify-center">
-            <div className="section-label mb-8 text-lg">DAILY PROGRESS</div>
-            <div className="flex flex-col items-center gap-6">
-              <div className="relative w-40 h-40 shrink-0">
-                <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
+          <div className="glass-elevated" style={{ padding: '32px 24px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ ...sectionLabel, marginBottom: 32, fontSize: '0.875rem' }}>DAILY PROGRESS</div>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24 }}>
+              <div style={{ position: 'relative', width: 160, height: 160 }}>
+                <svg viewBox="0 0 36 36" style={{ width: '100%', height: '100%', transform: 'rotate(-90deg)' }}>
                   <circle cx="18" cy="18" r="15" fill="none" stroke="rgba(148,163,184,0.05)" strokeWidth="3" />
                   <circle cx="18" cy="18" r="15" fill="none" stroke="#10b981" strokeWidth="3"
                     strokeDasharray={`${calPct} ${100 - calPct}`} strokeLinecap="round"
                     style={{ transition: 'stroke-dasharray 0.8s ease' }} />
                 </svg>
-                <div className="absolute inset-0 flex flex-col items-center justify-center mt-1">
-                  <span className="text-3xl font-bold text-white leading-none">{Math.round(calPct)}%</span>
-                  <span className="text-xs text-slate-500 mt-1 uppercase tracking-wider">Target</span>
+                <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginTop: 4 }}>
+                  <span style={{ fontSize: '1.875rem', fontWeight: 700, color: 'white', lineHeight: 1 }}>{Math.round(calPct)}%</span>
+                  <span style={{ fontSize: '0.6875rem', color: '#64748b', marginTop: 4, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Target</span>
                 </div>
               </div>
-              <div className="mt-2">
-                <div className="text-4xl sm:text-5xl font-extrabold text-white mb-2">{summary.calories || 0}</div>
-                <div className="text-lg text-slate-400 mb-2">of {metrics.targetCalories} kcal</div>
-                <div className="text-sm px-4 py-1.5 rounded-lg bg-white/[0.03] inline-block text-slate-400 font-medium border border-white/[0.05]">
-                  {(summary.calories || 0) > metrics.targetCalories ? <span className="text-rose-400">⚠ Over target</span> : <>{metrics.targetCalories - (summary.calories || 0)} <span className="text-slate-500">remaining</span></>}
+              <div style={{ marginTop: 8, textAlign: 'center' }}>
+                <div style={{ fontSize: 'clamp(2rem, 4vw, 2.75rem)', fontWeight: 800, color: 'white', marginBottom: 8 }}>{summary.calories || 0}</div>
+                <div style={{ fontSize: '1.0625rem', color: '#94a3b8', marginBottom: 8 }}>of {metrics.targetCalories} kcal</div>
+                <div style={{
+                  fontSize: '0.875rem', padding: '6px 16px', borderRadius: 8,
+                  background: 'rgba(255,255,255,0.03)', display: 'inline-block',
+                  color: '#94a3b8', fontWeight: 500,
+                  border: '1px solid rgba(255,255,255,0.05)',
+                }}>
+                  {(summary.calories || 0) > metrics.targetCalories
+                    ? <span style={{ color: '#fb7185' }}>⚠ Over target</span>
+                    : <>{metrics.targetCalories - (summary.calories || 0)} <span style={{ color: '#64748b' }}>remaining</span></>
+                  }
                 </div>
               </div>
             </div>
           </div>
 
           {/* Macro donut */}
-          <div className="glass-elevated p-8 sm:p-10 text-center flex flex-col items-center justify-center">
-            <div className="section-label mb-8 text-lg">MACRO SPLIT</div>
-            <div className="chart-container w-full max-w-[240px]" style={{ height: '220px' }}>
+          <div className="glass-elevated" style={{ padding: '32px 24px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ ...sectionLabel, marginBottom: 32, fontSize: '0.875rem' }}>MACRO SPLIT</div>
+            <div style={{ width: '100%', maxWidth: 240, height: 220 }}>
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie data={macroData} innerRadius="60%" outerRadius="85%" paddingAngle={5} dataKey="value" strokeWidth={0}>
@@ -203,78 +234,93 @@ export default function Dashboard({ profile, mealPlanData, onRegenerate }) {
                 </PieChart>
               </ResponsiveContainer>
             </div>
-            <div className="grid grid-cols-3 w-full mt-8 gap-2">
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', width: '100%', marginTop: 32, gap: 8 }}>
               {macroData.map((m, i) => (
-                <div key={i} className="text-center p-3 rounded-2xl bg-white/[0.02]">
-                  <div className="flex items-center justify-center gap-1.5 mb-2">
-                    <div className="w-2.5 h-2.5 rounded-full" style={{ background: m.color }} />
-                    <span className="text-xs text-slate-400 uppercase font-medium tracking-wider">{m.name}</span>
+                <div key={i} style={{ textAlign: 'center', padding: 12, borderRadius: 16, background: 'rgba(255,255,255,0.02)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, marginBottom: 8 }}>
+                    <div style={{ width: 10, height: 10, borderRadius: '50%', background: m.color }} />
+                    <span style={{ fontSize: '0.6875rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 500, letterSpacing: '0.06em' }}>{m.name}</span>
                   </div>
-                  <div className="text-xl font-bold text-white leading-none mb-1">{m.value}%</div>
-                  <div className="text-xs text-slate-500">{m.grams}g</div>
+                  <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'white', lineHeight: 1, marginBottom: 4 }}>{m.value}%</div>
+                  <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{m.grams}g</div>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        {/* Nutrients & Insights */}
-        <div className="w-full max-w-4xl space-y-8">
-          {/* Nutrients */}
-          <div className="glass-elevated p-8 sm:p-12 text-center">
-            <div className="section-label mb-8 text-lg">KEY NUTRIENTS</div>
-            <div className="space-y-6 max-w-2xl mx-auto">
+        {/* Key Nutrients */}
+        <div style={{ width: '100%', maxWidth: 800 }}>
+          <div className="glass-elevated" style={{ padding: '32px 24px', textAlign: 'center' }}>
+            <div style={{ ...sectionLabel, marginBottom: 32, fontSize: '0.875rem' }}>KEY NUTRIENTS</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 24, maxWidth: 600, margin: '0 auto' }}>
               {[
-                { label: 'Fiber', value: summary.fiber, target: metrics.macroDistribution?.fiberMin || 25, unit: 'g', color: 'bg-green-500' },
-                { label: 'Sodium', value: summary.sodium, target: metrics.sodiumLimit || 2300, unit: 'mg', color: (summary.sodium || 0) > (metrics.sodiumLimit || 2300) ? 'bg-rose-500' : 'bg-blue-500' },
-                { label: 'Potassium', value: summary.potassium, target: 4700, unit: 'mg', color: 'bg-purple-500' },
-                { label: 'Calcium', value: summary.calcium, target: 1000, unit: 'mg', color: 'bg-cyan-500' },
-                { label: 'Iron', value: summary.iron, target: 18, unit: 'mg', color: 'bg-orange-500' },
+                { label: 'Fiber', value: summary.fiber, target: metrics.macroDistribution?.fiberMin || 25, unit: 'g', color: '#22c55e' },
+                { label: 'Sodium', value: summary.sodium, target: metrics.sodiumLimit || 2300, unit: 'mg', color: (summary.sodium || 0) > (metrics.sodiumLimit || 2300) ? '#f43f5e' : '#3b82f6' },
+                { label: 'Potassium', value: summary.potassium, target: 4700, unit: 'mg', color: '#a855f7' },
+                { label: 'Calcium', value: summary.calcium, target: 1000, unit: 'mg', color: '#06b6d4' },
+                { label: 'Iron', value: summary.iron, target: 18, unit: 'mg', color: '#f97316' },
               ].map((n, i) => (
                 <div key={i}>
-                  <div className="flex justify-between text-base sm:text-lg mb-2.5 px-1">
-                    <span className="text-slate-400 font-medium">{n.label}</span>
-                    <span className="text-white tabular-nums font-bold">
-                      {Math.round(n.value || 0)} <span className="text-slate-500 font-normal text-sm">/ {n.target}{n.unit}</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.9375rem', marginBottom: 10, padding: '0 4px' }}>
+                    <span style={{ color: '#94a3b8', fontWeight: 500 }}>{n.label}</span>
+                    <span style={{ color: 'white', fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>
+                      {Math.round(n.value || 0)} <span style={{ color: '#64748b', fontWeight: 400, fontSize: '0.8125rem' }}>/ {n.target}{n.unit}</span>
                     </span>
                   </div>
-                  <div className="nutrition-bar h-2.5 bg-slate-800 border border-white/[0.02]">
-                    <div className={`nutrition-bar-fill ${n.color} relative`} style={{ width: `${Math.min(100, ((n.value || 0) / n.target) * 100)}%` }}>
-                      <div className="absolute top-0 bottom-0 right-0 w-8 bg-gradient-to-l from-white/20 to-transparent" />
+                  <div style={{ height: 10, borderRadius: 5, background: '#1e293b', border: '1px solid rgba(255,255,255,0.02)', overflow: 'hidden' }}>
+                    <div className="progress-fill" style={{
+                      height: '100%', borderRadius: 5, background: n.color, position: 'relative',
+                      width: `${Math.min(100, ((n.value || 0) / n.target) * 100)}%`,
+                    }}>
+                      <div style={{ position: 'absolute', top: 0, bottom: 0, right: 0, width: 32, background: 'linear-gradient(to left, rgba(255,255,255,0.2), transparent)' }} />
                     </div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
+        </div>
 
-          {/* Insights */}
-          {feedback.length > 0 && (
-            <div className="glass-elevated p-8 sm:p-12 text-center flex flex-col items-center">
-              <div className="section-label mb-8 flex items-center justify-center gap-2 text-lg">
-                <Zap className="w-5 h-5 text-primary" /> INSIGHTS
+        {/* Insights */}
+        {feedback.length > 0 && (
+          <div style={{ width: '100%', maxWidth: 800 }}>
+            <div className="glass-elevated" style={{ padding: '32px 24px', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div style={{ ...sectionLabel, marginBottom: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, fontSize: '0.875rem' }}>
+                <Zap style={{ width: 20, height: 20, color: '#10b981' }} /> INSIGHTS
               </div>
-              <div className="space-y-4 w-full max-w-2xl">
-                {feedback.map((a, i) => (
-                  <div key={i} className={`flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-4 p-5 sm:p-6 rounded-2xl border text-base leading-relaxed ${alertStyle(a.type)}`}>
-                    <div className="p-2 rounded-xl bg-white/[0.05] shrink-0">
-                      {alertIcon(a.type)}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: '100%', maxWidth: 600 }}>
+                {feedback.map((a, i) => {
+                  const st = alertStyle(a.type);
+                  return (
+                    <div key={i} style={{
+                      display: 'flex', alignItems: 'center', gap: 16,
+                      padding: '16px 20px', borderRadius: 16,
+                      background: st.bg, border: `1px solid ${st.border}`,
+                      color: st.color, fontSize: '0.9375rem', lineHeight: 1.6, textAlign: 'left',
+                    }}>
+                      <div style={{ padding: 8, borderRadius: 12, background: 'rgba(255,255,255,0.05)', flexShrink: 0 }}>
+                        {alertIcon(a.type)}
+                      </div>
+                      <span>{a.message}</span>
                     </div>
-                    <span className="mt-1">{a.message}</span>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
       {/* Weekly chart */}
-      <div className="w-full max-w-4xl glass-elevated p-8 sm:p-12 mb-10 text-center flex flex-col items-center mx-auto">
-        <div className="section-label mb-8 flex items-center justify-center gap-2 text-lg">
-          <TrendingUp className="w-5 h-5 text-primary" /> WEEKLY CALORIES
+      <div className="glass-elevated" style={{
+        maxWidth: 800, margin: '48px auto 40px', padding: '32px 24px',
+        textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center',
+      }}>
+        <div style={{ ...sectionLabel, marginBottom: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, fontSize: '0.875rem' }}>
+          <TrendingUp style={{ width: 20, height: 20, color: '#10b981' }} /> WEEKLY CALORIES
         </div>
-        <div className="chart-container w-full" style={{ height: '300px' }}>
+        <div style={{ width: '100%', height: 300 }}>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={weeklyCalories} barSize={32}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.04)" vertical={false} />
@@ -292,6 +338,15 @@ export default function Dashboard({ profile, mealPlanData, onRegenerate }) {
           </ResponsiveContainer>
         </div>
       </div>
+
+      <style>{`
+        .day-full { display: none; }
+        .day-short { display: inline; }
+        @media (min-width: 640px) {
+          .day-full { display: inline; }
+          .day-short { display: none; }
+        }
+      `}</style>
     </div>
   );
 }

@@ -33,102 +33,202 @@ export default function Landing() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-[#080c16] relative overflow-hidden">
+    <div style={{
+      minHeight: '100vh',
+      background: '#080c16',
+      position: 'relative',
+      overflowX: 'hidden',
+    }}>
       {/* Ambient glow */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-[-30%] left-[5%] w-[400px] h-[400px] bg-emerald-500/[0.03] rounded-full blur-[100px]" />
-        <div className="absolute bottom-[-20%] right-[10%] w-[350px] h-[350px] bg-blue-500/[0.02] rounded-full blur-[80px]" />
+      <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none' }}>
+        <div style={{
+          position: 'absolute', top: '-30%', left: '5%',
+          width: 400, height: 400,
+          background: 'rgba(16, 185, 129, 0.03)',
+          borderRadius: '50%', filter: 'blur(100px)',
+        }} />
+        <div style={{
+          position: 'absolute', bottom: '-20%', right: '10%',
+          width: 350, height: 350,
+          background: 'rgba(14, 165, 233, 0.02)',
+          borderRadius: '50%', filter: 'blur(80px)',
+        }} />
       </div>
 
-      <div className="relative">
+      <div style={{ position: 'relative' }}>
         {/* Nav */}
-        <nav className="max-w-5xl mx-auto px-5 sm:px-8 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-500/20">
-              <Droplets className="w-5 h-5 text-white" />
+        <nav style={{
+          maxWidth: 960, margin: '0 auto',
+          padding: '16px 24px',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{
+              width: 40, height: 40, borderRadius: 12,
+              background: 'linear-gradient(135deg, #10b981, #0d9488)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 4px 12px rgba(16, 185, 129, 0.2)',
+            }}>
+              <Droplets style={{ width: 20, height: 20, color: 'white' }} />
             </div>
-            <span className="text-xl font-bold text-white">NutriCare</span>
+            <span style={{ fontSize: '1.25rem', fontWeight: 700, color: 'white' }}>NutriCare</span>
           </div>
-          <button onClick={() => navigate('/onboarding')} className="btn-primary text-sm py-2.5 px-6">
-            Get Started <ArrowRight className="w-4 h-4" />
+          <button onClick={() => navigate('/onboarding')} className="btn-primary" style={{ fontSize: '0.875rem', padding: '10px 24px' }}>
+            Get Started <ArrowRight style={{ width: 16, height: 16 }} />
           </button>
         </nav>
 
         {/* Hero */}
-        <div className="text-center max-w-4xl mx-auto px-5 sm:px-8 pt-16 sm:pt-24 pb-16 sm:pb-20 animate-fade-in-up">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/[0.06] border border-primary/10 text-primary text-sm font-medium mb-8">
-            <Sparkles className="w-4 h-4" />
+        <div className="animate-fade-in-up" style={{
+          textAlign: 'center',
+          maxWidth: 800,
+          margin: '0 auto',
+          padding: '64px 24px 64px',
+        }}>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: 8,
+            padding: '8px 16px', borderRadius: 999,
+            background: 'rgba(16, 185, 129, 0.06)',
+            border: '1px solid rgba(16, 185, 129, 0.1)',
+            color: '#10b981', fontSize: '0.875rem', fontWeight: 500,
+            marginBottom: 32,
+          }}>
+            <Sparkles style={{ width: 16, height: 16 }} />
             Science-Backed Nutrition Plans
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-white leading-[1.1] mb-6 tracking-tight">
+          <h1 style={{
+            fontSize: 'clamp(2.25rem, 5vw, 4.25rem)',
+            fontWeight: 800, color: 'white',
+            lineHeight: 1.1, marginBottom: 24,
+            letterSpacing: '-0.02em',
+          }}>
             Your Personalized
             <br />
             <span className="gradient-text">Diet Planner</span>
           </h1>
 
-          <p className="text-base sm:text-lg text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-            Clinically-informed meal plans for <strong className="text-slate-200 font-medium">PCOS</strong>, <strong className="text-slate-200 font-medium">Diabetes</strong>, and <strong className="text-slate-200 font-medium">Hypertension</strong> — backed by evidence-based nutrition science.
+          <p style={{
+            fontSize: '1.0625rem', color: '#94a3b8',
+            maxWidth: 560, margin: '0 auto 40px',
+            lineHeight: 1.7,
+          }}>
+            Clinically-informed meal plans for{' '}
+            <strong style={{ color: '#cbd5e1', fontWeight: 500 }}>PCOS</strong>,{' '}
+            <strong style={{ color: '#cbd5e1', fontWeight: 500 }}>Diabetes</strong>, and{' '}
+            <strong style={{ color: '#cbd5e1', fontWeight: 500 }}>Hypertension</strong>{' '}
+            — backed by evidence-based nutrition science.
           </p>
 
           <button
             onClick={() => navigate('/onboarding')}
-            className="btn-primary text-lg py-4 px-10 animate-pulse-glow"
+            className="btn-primary animate-pulse-glow"
+            style={{ fontSize: '1.125rem', padding: '16px 40px' }}
           >
-            Start Your Free Plan <ArrowRight className="w-5 h-5 ml-1" />
+            Start Your Free Plan <ArrowRight style={{ width: 20, height: 20, marginLeft: 4 }} />
           </button>
         </div>
 
         {/* Stats */}
-        <div className="max-w-3xl mx-auto px-5 sm:px-8 pb-16">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 24px 64px' }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: 16,
+          }}>
             {stats.map((s, i) => (
-              <div key={i} className={`stat-card text-center animate-fade-in-up stagger-${i + 1}`} style={{ opacity: 0 }}>
-                <s.icon className="w-5 h-5 text-primary mx-auto mb-3" />
-                <div className="text-2xl font-bold text-white leading-none mb-1">{s.value}</div>
-                <div className="text-sm text-slate-500">{s.label}</div>
+              <div key={i} className={`stat-card animate-fade-in-up stagger-${i + 1}`}
+                style={{ textAlign: 'center', opacity: 0, padding: '20px 12px' }}>
+                <s.icon style={{ width: 20, height: 20, color: '#10b981', margin: '0 auto 12px' }} />
+                <div style={{ fontSize: '1.5rem', fontWeight: 700, color: 'white', lineHeight: 1, marginBottom: 6 }}>
+                  {s.value}
+                </div>
+                <div style={{ fontSize: '0.8125rem', color: '#64748b' }}>{s.label}</div>
               </div>
             ))}
           </div>
         </div>
 
         {/* Condition Cards */}
-        <section className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
-          <div className="text-center mb-12">
-            <div className="section-label mb-3">CONDITIONS WE SUPPORT</div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight mb-4">Choose Your Condition</h2>
-            <p className="text-slate-500 text-sm sm:text-base max-w-xl mx-auto">
+        <section style={{ maxWidth: 1100, margin: '0 auto', padding: '64px 24px 80px' }}>
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+            <div className="section-label" style={{ marginBottom: 12 }}>CONDITIONS WE SUPPORT</div>
+            <h2 style={{
+              fontSize: 'clamp(1.75rem, 3vw, 2.5rem)',
+              fontWeight: 700, color: 'white',
+              letterSpacing: '-0.02em', marginBottom: 16,
+            }}>
+              Choose Your Condition
+            </h2>
+            <p style={{ color: '#64748b', fontSize: '0.9375rem', maxWidth: 480, margin: '0 auto' }}>
               Evidence-based dietary guidelines tailored to your specific condition
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: 20,
+          }}>
             {conditions.map((c, i) => (
               <button
                 key={c.id}
                 onClick={() => navigate('/onboarding', { state: { condition: c.id } })}
-                className={`glass-interactive p-6 sm:p-8 text-center flex flex-col items-center group animate-fade-in-up stagger-${i + 1}`}
-                style={{ opacity: 0 }}
+                className={`glass-interactive animate-fade-in-up stagger-${i + 1}`}
+                style={{
+                  opacity: 0,
+                  padding: '32px 24px',
+                  textAlign: 'center',
+                  display: 'flex', flexDirection: 'column', alignItems: 'center',
+                }}
               >
-                <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${c.color} flex items-center justify-center mb-5 group-hover:scale-105 transition-transform shadow-lg`}>
-                  <c.icon className="w-7 h-7 text-white" />
+                <div className={`bg-gradient-to-br ${c.color}`} style={{
+                  width: 56, height: 56, borderRadius: 16,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  marginBottom: 20,
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+                  transition: 'transform 0.2s ease',
+                }}>
+                  <c.icon style={{ width: 28, height: 28, color: 'white' }} />
                 </div>
 
-                <h3 className="text-xl font-bold text-white mb-1.5">{c.name}</h3>
-                <p className="text-xs text-slate-500 mb-4">{c.full}</p>
-                <p className="text-slate-300 text-sm mb-6 leading-relaxed">{c.desc}</p>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'white', marginBottom: 6 }}>
+                  {c.name}
+                </h3>
+                <p style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: 16 }}>
+                  {c.full}
+                </p>
+                <p style={{
+                  color: '#cbd5e1', fontSize: '0.875rem',
+                  marginBottom: 24, lineHeight: 1.6,
+                  maxWidth: 260, margin: '0 auto 24px',
+                }}>
+                  {c.desc}
+                </p>
 
-                <div className="space-y-2 flex flex-col items-center">
+                <div style={{
+                  display: 'flex', flexDirection: 'column',
+                  alignItems: 'center', gap: 10,
+                }}>
                   {c.features.map((f, j) => (
-                    <div key={j} className="flex items-center gap-2 text-xs text-slate-300">
-                      <div className={`w-1.5 h-1.5 rounded-full bg-gradient-to-r ${c.color}`} />
+                    <div key={j} style={{
+                      display: 'flex', alignItems: 'center', gap: 8,
+                      fontSize: '0.8125rem', color: '#cbd5e1',
+                    }}>
+                      <div className={`bg-gradient-to-r ${c.color}`} style={{
+                        width: 6, height: 6, borderRadius: '50%', flexShrink: 0,
+                      }} />
                       {f}
                     </div>
                   ))}
                 </div>
 
-                <div className="flex items-center justify-center gap-2 mt-8 text-primary text-sm font-semibold group-hover:gap-3 transition-all">
-                  Get Started <ChevronRight className="w-4 h-4" />
+                <div style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  gap: 8, marginTop: 28,
+                  color: '#10b981', fontSize: '0.875rem', fontWeight: 600,
+                }}>
+                  Get Started <ChevronRight style={{ width: 16, height: 16 }} />
                 </div>
               </button>
             ))}
@@ -136,45 +236,94 @@ export default function Landing() {
         </section>
 
         {/* How It Works */}
-        <section className="max-w-6xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
-          <div className="text-center mb-12">
-            <div className="section-label mb-3">HOW IT WORKS</div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-white tracking-tight mb-3">Three Simple Steps</h2>
-            <p className="text-slate-500 text-sm sm:text-base">Get your personalized plan in under a minute</p>
+        <section style={{ maxWidth: 1100, margin: '0 auto', padding: '64px 24px 80px' }}>
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+            <div className="section-label" style={{ marginBottom: 12 }}>HOW IT WORKS</div>
+            <h2 style={{
+              fontSize: 'clamp(1.75rem, 3vw, 2.5rem)',
+              fontWeight: 700, color: 'white',
+              letterSpacing: '-0.02em', marginBottom: 12,
+            }}>
+              Three Simple Steps
+            </h2>
+            <p style={{ color: '#64748b', fontSize: '0.9375rem' }}>
+              Get your personalized plan in under a minute
+            </p>
           </div>
 
-          <div className="grid sm:grid-cols-3 gap-6">
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+            gap: 24,
+          }}>
             {[
               { n: '01', title: 'Tell Us About You', desc: 'Share your condition, dietary preferences, and health goals.' },
               { n: '02', title: 'Get Your Plan', desc: 'Our engine generates a 7-day meal plan with precise calculations.' },
               { n: '03', title: 'Track & Improve', desc: 'Monitor nutrition, rate meals, and watch your plan adapt.' }
             ].map((s, i) => (
-              <div key={i} className="stat-card p-8 text-center flex flex-col items-center">
-                <div className="text-5xl font-black gradient-text mb-5 inline-block">{s.n}</div>
-                <h3 className="text-xl font-bold text-white mb-3">{s.title}</h3>
-                <p className="text-base text-slate-400 leading-relaxed max-w-xs">{s.desc}</p>
+              <div key={i} className="stat-card" style={{
+                padding: '32px 24px',
+                textAlign: 'center',
+                display: 'flex', flexDirection: 'column', alignItems: 'center',
+              }}>
+                <div className="gradient-text" style={{
+                  fontSize: '3rem', fontWeight: 900,
+                  marginBottom: 20, display: 'inline-block',
+                }}>
+                  {s.n}
+                </div>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'white', marginBottom: 12 }}>
+                  {s.title}
+                </h3>
+                <p style={{
+                  fontSize: '0.9375rem', color: '#94a3b8',
+                  lineHeight: 1.7, maxWidth: 280,
+                }}>
+                  {s.desc}
+                </p>
               </div>
             ))}
           </div>
         </section>
 
-        <section className="max-w-4xl mx-auto px-5 sm:px-8 py-16 sm:py-24">
-          <div className="glass-elevated p-10 sm:p-14 text-center">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4">Ready to Transform Your Diet?</h2>
-            <p className="text-slate-400 mb-8 max-w-lg mx-auto text-sm sm:text-base leading-relaxed">
+        {/* CTA */}
+        <section style={{ maxWidth: 800, margin: '0 auto', padding: '64px 24px 80px' }}>
+          <div className="glass-elevated" style={{
+            padding: '48px 32px',
+            textAlign: 'center',
+          }}>
+            <h2 style={{
+              fontSize: 'clamp(1.5rem, 3vw, 2.25rem)',
+              fontWeight: 700, color: 'white', marginBottom: 16,
+            }}>
+              Ready to Transform Your Diet?
+            </h2>
+            <p style={{
+              color: '#94a3b8', marginBottom: 32,
+              maxWidth: 460, margin: '0 auto 32px',
+              fontSize: '0.9375rem', lineHeight: 1.7,
+            }}>
               Science-backed nutrition plans personalized to your chronic condition.
             </p>
-            <button onClick={() => navigate('/onboarding')} className="btn-primary text-base py-3.5 px-8">
-              Create Your Free Plan <ArrowRight className="w-4 h-4 ml-1" />
+            <button onClick={() => navigate('/onboarding')} className="btn-primary" style={{ fontSize: '1rem', padding: '14px 32px' }}>
+              Create Your Free Plan <ArrowRight style={{ width: 16, height: 16, marginLeft: 4 }} />
             </button>
           </div>
         </section>
 
         {/* Footer */}
-        <footer className="border-t border-white/[0.03] py-6">
-          <div className="max-w-5xl mx-auto px-5 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-[0.65rem] text-slate-600">
-            <div className="flex items-center gap-1.5">
-              <Droplets className="w-3 h-3 text-primary" />
+        <footer style={{
+          borderTop: '1px solid rgba(255,255,255,0.03)',
+          padding: '24px 0',
+        }}>
+          <div style={{
+            maxWidth: 960, margin: '0 auto', padding: '0 24px',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            flexWrap: 'wrap', gap: 12,
+            fontSize: '0.6875rem', color: '#475569',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <Droplets style={{ width: 12, height: 12, color: '#10b981' }} />
               NutriCare — Evidence-based nutrition
             </div>
             <div>Built for health. Powered by science.</div>

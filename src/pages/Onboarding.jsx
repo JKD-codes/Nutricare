@@ -14,9 +14,9 @@ const STEPS = [
 ];
 
 const conditions = [
-  { id: 'PCOS', label: 'PCOS', desc: 'Polycystic Ovary Syndrome', gradient: 'from-purple-500 to-pink-500' },
-  { id: 'Diabetes', label: 'Diabetes Type 2', desc: 'Blood sugar management', gradient: 'from-blue-500 to-cyan-500' },
-  { id: 'Hypertension', label: 'Hypertension', desc: 'High blood pressure', gradient: 'from-rose-500 to-red-500' }
+  { id: 'PCOS', label: 'PCOS', desc: 'Polycystic Ovary Syndrome', gradient: 'linear-gradient(135deg, #a855f7, #ec4899)' },
+  { id: 'Diabetes', label: 'Diabetes Type 2', desc: 'Blood sugar management', gradient: 'linear-gradient(135deg, #3b82f6, #06b6d4)' },
+  { id: 'Hypertension', label: 'Hypertension', desc: 'High blood pressure', gradient: 'linear-gradient(135deg, #f43f5e, #ef4444)' }
 ];
 
 export default function Onboarding({ onComplete }) {
@@ -68,98 +68,154 @@ export default function Onboarding({ onComplete }) {
   const next = () => step < STEPS.length - 1 ? setStep(s => s + 1) : handleFinish();
   const prev = () => step > 0 && setStep(s => s - 1);
 
+  // Shared styles
+  const labelStyle = { display: 'block', fontSize: '0.875rem', fontWeight: 500, color: '#cbd5e1', marginBottom: 8 };
+  const chipStyle = (active) => ({
+    display: 'inline-flex', alignItems: 'center', gap: 4,
+    padding: '4px 10px', borderRadius: 8,
+    fontSize: '0.75rem', border: 'none', cursor: 'pointer',
+    background: active ? 'rgba(16,185,129,0.08)' : 'rgba(239,68,68,0.08)',
+    color: active ? '#34d399' : '#f87171',
+    transition: 'all 0.2s',
+  });
+
   if (generating) {
     return (
-      <div className="min-h-screen bg-[#080c16] flex items-center justify-center">
-        <div className="text-center animate-fade-in-up px-6">
-          <div className="w-14 h-14 mx-auto mb-5 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center animate-pulse-glow">
-            <Sparkles className="w-7 h-7 text-white" />
+      <div style={{
+        minHeight: '100vh', background: '#080c16',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}>
+        <div className="animate-fade-in-up" style={{ textAlign: 'center', padding: '0 24px' }}>
+          <div className="animate-pulse-glow" style={{
+            width: 56, height: 56, margin: '0 auto 20px', borderRadius: 16,
+            background: 'linear-gradient(135deg, #10b981, #0d9488)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <Sparkles style={{ width: 28, height: 28, color: 'white' }} />
           </div>
-          <h2 className="text-lg font-bold text-white mb-2">Generating Your Plan</h2>
-          <p className="text-sm text-slate-400 mb-5">Creating a personalized 7-day meal plan...</p>
-          <Loader2 className="w-5 h-5 text-primary mx-auto animate-spin" />
+          <h2 style={{ fontSize: '1.125rem', fontWeight: 700, color: 'white', marginBottom: 8 }}>Generating Your Plan</h2>
+          <p style={{ fontSize: '0.875rem', color: '#94a3b8', marginBottom: 20 }}>Creating a personalized 7-day meal plan...</p>
+          <Loader2 style={{ width: 20, height: 20, color: '#10b981', margin: '0 auto', animation: 'spin 1s linear infinite' }} />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#080c16] flex flex-col">
+    <div style={{
+      minHeight: '100vh', background: '#080c16',
+      display: 'flex', flexDirection: 'column',
+    }}>
       {/* Header */}
-      <div className="px-4 sm:px-8 py-4 border-b border-white/[0.04]">
-        <div className="max-w-xl mx-auto flex items-center justify-between">
-          <button onClick={() => navigate('/')} className="text-slate-500 hover:text-white text-sm transition-colors font-medium">← Back</button>
-          <span className="text-sm font-medium text-slate-500">Step {step + 1} / {STEPS.length}</span>
+      <div style={{ padding: '16px 24px', borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+        <div style={{ maxWidth: 560, margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <button onClick={() => navigate('/')} style={{
+            background: 'none', border: 'none', cursor: 'pointer',
+            color: '#64748b', fontSize: '0.875rem', fontWeight: 500,
+            transition: 'color 0.2s',
+          }}>
+            ← Back
+          </button>
+          <span style={{ fontSize: '0.875rem', fontWeight: 500, color: '#64748b' }}>
+            Step {step + 1} / {STEPS.length}
+          </span>
         </div>
       </div>
 
-      {/* Progress */}
-      <div className="px-4 sm:px-8 pt-6">
-        <div className="max-w-xl mx-auto">
-          <div className="h-1.5 bg-white/[0.03] rounded-full overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full progress-fill" style={{ width: `${((step + 1) / STEPS.length) * 100}%` }} />
+      {/* Progress bar */}
+      <div style={{ padding: '24px 24px 0' }}>
+        <div style={{ maxWidth: 560, margin: '0 auto' }}>
+          <div style={{ height: 6, background: 'rgba(255,255,255,0.03)', borderRadius: 999, overflow: 'hidden' }}>
+            <div className="progress-fill" style={{
+              height: '100%',
+              background: 'linear-gradient(90deg, #10b981, #2dd4bf)',
+              borderRadius: 999,
+              width: `${((step + 1) / STEPS.length) * 100}%`,
+            }} />
           </div>
         </div>
       </div>
 
       {/* Content */}
-      <div className="flex-1 px-4 sm:px-8 py-10 overflow-y-auto">
-        <div className="max-w-xl mx-auto animate-fade-in" key={step}>
-          <div className="text-center mb-10">
-            <div className="w-12 h-12 mx-auto mb-4 rounded-xl bg-primary/10 flex items-center justify-center">
-              {(() => { const I = STEPS[step].icon; return <I className="w-6 h-6 text-primary" />; })()}
+      <div style={{ flex: 1, padding: '40px 24px', overflowY: 'auto' }}>
+        <div className="animate-fade-in" key={step} style={{ maxWidth: 560, margin: '0 auto' }}>
+          {/* Step Header */}
+          <div style={{ textAlign: 'center', marginBottom: 40 }}>
+            <div style={{
+              width: 48, height: 48, margin: '0 auto 16px', borderRadius: 12,
+              background: 'rgba(16, 185, 129, 0.1)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              {(() => { const I = STEPS[step].icon; return <I style={{ width: 24, height: 24, color: '#10b981' }} />; })()}
             </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">{STEPS[step].title}</h2>
-            <p className="text-sm sm:text-base text-slate-400">{STEPS[step].sub}</p>
+            <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 1.875rem)', fontWeight: 700, color: 'white', marginBottom: 8 }}>
+              {STEPS[step].title}
+            </h2>
+            <p style={{ fontSize: '0.9375rem', color: '#94a3b8' }}>{STEPS[step].sub}</p>
           </div>
 
           {/* Step 0: Condition */}
           {step === 0 && (
-            <div className="space-y-3 sm:space-y-4">
-              {conditions.map(opt => (
-                <button key={opt.id} onClick={() => upHealth('primaryCondition', opt.id)}
-                  className={`glass-interactive w-full p-5 sm:p-6 text-left flex items-center gap-4 ${profile.health.primaryCondition === opt.id ? 'border-primary/40 bg-primary/[0.06] shadow-lg shadow-primary/5' : ''}`}>
-                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${opt.gradient} flex items-center justify-center shrink-0`}>
-                    <Heart className="w-6 h-6 text-white" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="text-base sm:text-lg font-bold text-white mb-0.5">{opt.label}</div>
-                    <div className="text-sm text-slate-400">{opt.desc}</div>
-                  </div>
-                  {profile.health.primaryCondition === opt.id && <CheckCircle2 className="w-6 h-6 text-primary shrink-0" />}
-                </button>
-              ))}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {conditions.map(opt => {
+                const selected = profile.health.primaryCondition === opt.id;
+                return (
+                  <button key={opt.id} onClick={() => upHealth('primaryCondition', opt.id)}
+                    className="glass-interactive"
+                    style={{
+                      width: '100%', padding: '20px 24px',
+                      display: 'flex', alignItems: 'center', gap: 16,
+                      textAlign: 'left',
+                      borderColor: selected ? 'rgba(16,185,129,0.4)' : undefined,
+                      background: selected ? 'rgba(16,185,129,0.06)' : undefined,
+                      boxShadow: selected ? '0 4px 16px rgba(16,185,129,0.05)' : undefined,
+                    }}>
+                    <div style={{
+                      width: 48, height: 48, borderRadius: 12, flexShrink: 0,
+                      background: opt.gradient,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}>
+                      <Heart style={{ width: 24, height: 24, color: 'white' }} />
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: '1.0625rem', fontWeight: 700, color: 'white', marginBottom: 2 }}>{opt.label}</div>
+                      <div style={{ fontSize: '0.875rem', color: '#94a3b8' }}>{opt.desc}</div>
+                    </div>
+                    {selected && <CheckCircle2 style={{ width: 24, height: 24, color: '#10b981', flexShrink: 0 }} />}
+                  </button>
+                );
+              })}
             </div>
           )}
 
           {/* Step 1: Personal Info */}
           {step === 1 && (
-            <div className="space-y-5">
-              <div className="grid grid-cols-2 gap-4">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Age</label>
+                  <label style={labelStyle}>Age</label>
                   <input type="number" placeholder="28" value={profile.personalInfo.age} onChange={e => upPersonal('age', e.target.value)} />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Gender</label>
+                  <label style={labelStyle}>Gender</label>
                   <select value={profile.personalInfo.gender} onChange={e => upPersonal('gender', e.target.value)}>
                     <option value="female">Female</option>
                     <option value="male">Male</option>
                   </select>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-4">
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Height (cm)</label>
+                  <label style={labelStyle}>Height (cm)</label>
                   <input type="number" placeholder="165" value={profile.personalInfo.height} onChange={e => upPersonal('height', e.target.value)} />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Weight (kg)</label>
+                  <label style={labelStyle}>Weight (kg)</label>
                   <input type="number" placeholder="70" value={profile.personalInfo.weight} onChange={e => upPersonal('weight', e.target.value)} />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Activity Level</label>
+                <label style={labelStyle}>Activity Level</label>
                 <select value={profile.personalInfo.activityLevel} onChange={e => upPersonal('activityLevel', e.target.value)}>
                   <option value="sedentary">Sedentary (little exercise)</option>
                   <option value="light">Light (1-3 days/week)</option>
@@ -173,35 +229,35 @@ export default function Onboarding({ onComplete }) {
 
           {/* Step 2: Health */}
           {step === 2 && (
-            <div className="space-y-5">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">How long have you had {profile.health.primaryCondition}? (years)</label>
+                <label style={labelStyle}>How long have you had {profile.health.primaryCondition}? (years)</label>
                 <input type="number" placeholder="3" value={profile.health.duration} onChange={e => upHealth('duration', e.target.value)} />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Current Medications</label>
-                <div className="flex gap-2 sm:gap-3">
+                <label style={labelStyle}>Current Medications</label>
+                <div style={{ display: 'flex', gap: 10 }}>
                   <input placeholder="e.g., Metformin 500mg" value={medInput} onChange={e => setMedInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && addMed()} />
-                  <button onClick={addMed} className="btn-secondary shrink-0 py-2.5 px-5">Add</button>
+                  <button onClick={addMed} className="btn-secondary" style={{ flexShrink: 0, padding: '10px 20px' }}>Add</button>
                 </div>
-                <div className="flex flex-wrap gap-1.5 mt-2">
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 8 }}>
                   {profile.health.medications.map((m, i) => (
-                    <span key={i} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-primary/8 text-primary text-xs">
-                      {m} <button onClick={() => rmMed(i)} className="hover:text-red-400 ml-0.5">×</button>
+                    <span key={i} style={chipStyle(true)}>
+                      {m} <button onClick={() => rmMed(i)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#f87171', marginLeft: 2, fontSize: '1rem' }}>×</button>
                     </span>
                   ))}
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Food Allergies</label>
-                <div className="flex gap-2 sm:gap-3">
+                <label style={labelStyle}>Food Allergies</label>
+                <div style={{ display: 'flex', gap: 10 }}>
                   <input placeholder="e.g., peanuts, shellfish" value={allergyInput} onChange={e => setAllergyInput(e.target.value)} onKeyDown={e => e.key === 'Enter' && addAllergy()} />
-                  <button onClick={addAllergy} className="btn-secondary shrink-0 py-2.5 px-5">Add</button>
+                  <button onClick={addAllergy} className="btn-secondary" style={{ flexShrink: 0, padding: '10px 20px' }}>Add</button>
                 </div>
-                <div className="flex flex-wrap gap-1.5 mt-2">
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 8 }}>
                   {profile.health.allergies.map((a, i) => (
-                    <span key={i} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-red-500/8 text-red-400 text-xs">
-                      {a} <button onClick={() => rmAllergy(i)} className="hover:text-red-300 ml-0.5">×</button>
+                    <span key={i} style={chipStyle(false)}>
+                      {a} <button onClick={() => rmAllergy(i)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#fca5a5', marginLeft: 2, fontSize: '1rem' }}>×</button>
                     </span>
                   ))}
                 </div>
@@ -211,37 +267,49 @@ export default function Onboarding({ onComplete }) {
 
           {/* Step 3: Diet */}
           {step === 3 && (
-            <div className="space-y-6">
-              <div className="grid grid-cols-2 gap-3 sm:gap-4">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                 {[{ key: 'vegetarian', icon: '🥦', label: 'Vegetarian', desc: 'No meat or fish' }, { key: 'vegan', icon: '🌱', label: 'Vegan', desc: 'No animal products' }].map(d => (
                   <button key={d.key} onClick={() => upDiet(d.key, !profile.dietary[d.key])}
-                    className={`glass-interactive p-4 text-center ${profile.dietary[d.key] ? 'border-green-500/30 bg-green-500/[0.04] shadow-sm shadow-green-500/10' : ''}`}>
-                    <div className="text-3xl mb-2">{d.icon}</div>
-                    <div className="text-sm font-bold text-white mb-1">{d.label}</div>
-                    <div className="text-[0.6875rem] text-slate-400">{d.desc}</div>
+                    className="glass-interactive"
+                    style={{
+                      padding: 16, textAlign: 'center',
+                      borderColor: profile.dietary[d.key] ? 'rgba(34,197,94,0.3)' : undefined,
+                      background: profile.dietary[d.key] ? 'rgba(34,197,94,0.04)' : undefined,
+                    }}>
+                    <div style={{ fontSize: '2rem', marginBottom: 8 }}>{d.icon}</div>
+                    <div style={{ fontSize: '0.875rem', fontWeight: 700, color: 'white', marginBottom: 4 }}>{d.label}</div>
+                    <div style={{ fontSize: '0.6875rem', color: '#94a3b8' }}>{d.desc}</div>
                   </button>
                 ))}
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Preferred Cuisines</label>
-                <div className="flex flex-wrap gap-2">
-                  {['Indian', 'Mediterranean', 'Asian', 'Mexican', 'Global'].map(c => (
-                    <button key={c} onClick={() => {
-                      const curr = profile.dietary.cuisinePreferences;
-                      upDiet('cuisinePreferences', curr.includes(c) ? curr.filter(x => x !== c) : [...curr, c]);
-                    }}
-                      className={`px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
-                        profile.dietary.cuisinePreferences.includes(c) ? 'bg-primary/15 text-primary border border-primary/30' : 'bg-white/[0.03] text-slate-400 border border-white/[0.04] hover:bg-white/[0.05]'
-                      }`}>
-                      {c}
-                    </button>
-                  ))}
+                <label style={labelStyle}>Preferred Cuisines</label>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  {['Indian', 'Mediterranean', 'Asian', 'Mexican', 'Global'].map(c => {
+                    const sel = profile.dietary.cuisinePreferences.includes(c);
+                    return (
+                      <button key={c} onClick={() => {
+                        const curr = profile.dietary.cuisinePreferences;
+                        upDiet('cuisinePreferences', curr.includes(c) ? curr.filter(x => x !== c) : [...curr, c]);
+                      }} style={{
+                        padding: '8px 16px', borderRadius: 12,
+                        fontSize: '0.875rem', fontWeight: 500,
+                        border: `1px solid ${sel ? 'rgba(16,185,129,0.3)' : 'rgba(255,255,255,0.04)'}`,
+                        background: sel ? 'rgba(16,185,129,0.15)' : 'rgba(255,255,255,0.03)',
+                        color: sel ? '#10b981' : '#94a3b8',
+                        cursor: 'pointer', transition: 'all 0.2s',
+                      }}>
+                        {c}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Cooking Skill</label>
+                <label style={labelStyle}>Cooking Skill</label>
                 <select value={profile.dietary.cookingSkillLevel} onChange={e => upDiet('cookingSkillLevel', e.target.value)}>
                   <option value="beginner">Beginner (quick & easy)</option>
                   <option value="intermediate">Intermediate</option>
@@ -250,16 +318,24 @@ export default function Onboarding({ onComplete }) {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Meals Per Day</label>
-                <div className="flex gap-3">
-                  {[3, 4, 5].map(n => (
-                    <button key={n} onClick={() => upDiet('mealsPerDay', n)}
-                      className={`flex-1 py-2.5 rounded-lg text-center text-xs font-medium transition-colors ${
-                        profile.dietary.mealsPerDay === n ? 'bg-primary/15 text-primary border border-primary/20' : 'bg-white/[0.03] text-slate-400 border border-white/[0.04]'
-                      }`}>
-                      {n} meals
-                    </button>
-                  ))}
+                <label style={labelStyle}>Meals Per Day</label>
+                <div style={{ display: 'flex', gap: 12 }}>
+                  {[3, 4, 5].map(n => {
+                    const sel = profile.dietary.mealsPerDay === n;
+                    return (
+                      <button key={n} onClick={() => upDiet('mealsPerDay', n)}
+                        style={{
+                          flex: 1, padding: '10px 0', borderRadius: 10,
+                          textAlign: 'center', fontSize: '0.8125rem', fontWeight: 500,
+                          border: `1px solid ${sel ? 'rgba(16,185,129,0.2)' : 'rgba(255,255,255,0.04)'}`,
+                          background: sel ? 'rgba(16,185,129,0.15)' : 'rgba(255,255,255,0.03)',
+                          color: sel ? '#10b981' : '#94a3b8',
+                          cursor: 'pointer', transition: 'all 0.2s',
+                        }}>
+                        {n} meals
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -267,9 +343,9 @@ export default function Onboarding({ onComplete }) {
 
           {/* Step 4: Goals */}
           {step === 4 && (
-            <div className="space-y-6">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Primary Goal</label>
+                <label style={labelStyle}>Primary Goal</label>
                 <select value={profile.goals.primaryGoal} onChange={e => upGoals('primaryGoal', e.target.value)}>
                   <option value="Manage condition through diet">Manage condition through diet</option>
                   <option value="Weight loss">Weight loss</option>
@@ -279,30 +355,40 @@ export default function Onboarding({ onComplete }) {
                 </select>
               </div>
 
-              <label className="glass-interactive flex items-start gap-3 p-5 cursor-pointer">
+              <label className="glass-interactive" style={{
+                display: 'flex', alignItems: 'flex-start', gap: 12, padding: 20, cursor: 'pointer',
+              }}>
                 <input type="checkbox" checked={profile.goals.weightLoss} onChange={e => upGoals('weightLoss', e.target.checked)}
-                  className="w-5 h-5 mt-0.5 rounded border-slate-600 bg-slate-800 text-primary" />
+                  style={{ width: 20, height: 20, marginTop: 2, accentColor: '#10b981' }} />
                 <div>
-                  <div className="text-sm font-medium text-white mb-0.5">I want to lose weight</div>
-                  <div className="text-xs text-slate-400">500 kcal/day deficit (~0.5 kg/week)</div>
+                  <div style={{ fontSize: '0.875rem', fontWeight: 500, color: 'white', marginBottom: 2 }}>I want to lose weight</div>
+                  <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>500 kcal/day deficit (~0.5 kg/week)</div>
                 </div>
               </label>
 
               {profile.goals.weightLoss && (
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-2">Target Weight (kg)</label>
+                  <label style={labelStyle}>Target Weight (kg)</label>
                   <input type="number" placeholder="65" value={profile.goals.weightTarget} onChange={e => upGoals('weightTarget', e.target.value)} />
                 </div>
               )}
 
-              <div className="glass-interactive p-5 sm:p-6 border-primary/20 bg-primary/[0.03]">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
-                    <Sparkles className="w-5 h-5 text-primary" />
+              <div className="glass-interactive" style={{
+                padding: '20px 24px',
+                borderColor: 'rgba(16,185,129,0.2)',
+                background: 'rgba(16,185,129,0.03)',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
+                  <div style={{
+                    width: 40, height: 40, borderRadius: '50%', flexShrink: 0,
+                    background: 'rgba(16,185,129,0.2)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    <Sparkles style={{ width: 20, height: 20, color: '#10b981' }} />
                   </div>
                   <div>
-                    <div className="text-sm sm:text-base font-bold text-white mb-1">Ready to generate!</div>
-                    <div className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    <div style={{ fontSize: '0.9375rem', fontWeight: 700, color: 'white', marginBottom: 4 }}>Ready to generate!</div>
+                    <div style={{ fontSize: '0.8125rem', color: '#cbd5e1', lineHeight: 1.6 }}>
                       We'll create a personalized 7-day plan for your {profile.health.primaryCondition} condition. Click "Generate Plan" below.
                     </div>
                   </div>
@@ -314,16 +400,36 @@ export default function Onboarding({ onComplete }) {
       </div>
 
       {/* Bottom nav */}
-      <div className="px-4 sm:px-8 py-4 border-t border-white/[0.04] bg-[#080c16]/80 backdrop-blur-md sticky bottom-0 z-10">
-        <div className="max-w-xl mx-auto flex justify-between">
-          <button onClick={prev} disabled={step === 0} className="btn-secondary disabled:opacity-25 disabled:cursor-not-allowed">
-            <ArrowLeft className="w-4 h-4 mr-1.5" /> Back
+      <div style={{
+        padding: '16px 24px',
+        borderTop: '1px solid rgba(255,255,255,0.04)',
+        background: 'rgba(8,12,22,0.8)',
+        backdropFilter: 'blur(12px)',
+        position: 'sticky', bottom: 0, zIndex: 10,
+      }}>
+        <div style={{ maxWidth: 560, margin: '0 auto', display: 'flex', justifyContent: 'space-between' }}>
+          <button onClick={prev} disabled={step === 0} className="btn-secondary"
+            style={{ opacity: step === 0 ? 0.25 : 1, cursor: step === 0 ? 'not-allowed' : 'pointer' }}>
+            <ArrowLeft style={{ width: 16, height: 16, marginRight: 6 }} /> Back
           </button>
-          <button onClick={next} disabled={!canGo()} className="btn-primary disabled:opacity-25 disabled:cursor-not-allowed px-8 shadow-lg shadow-primary/20">
-            {step === STEPS.length - 1 ? <><span>Generate Plan</span> <Sparkles className="w-4 h-4 ml-1.5" /></> : <><span>Continue</span> <ArrowRight className="w-4 h-4 ml-1.5" /></>}
+          <button onClick={next} disabled={!canGo()} className="btn-primary"
+            style={{
+              padding: '11px 32px',
+              opacity: canGo() ? 1 : 0.25,
+              cursor: canGo() ? 'pointer' : 'not-allowed',
+              boxShadow: '0 4px 16px rgba(16,185,129,0.2)',
+            }}>
+            {step === STEPS.length - 1
+              ? <><span>Generate Plan</span> <Sparkles style={{ width: 16, height: 16, marginLeft: 6 }} /></>
+              : <><span>Continue</span> <ArrowRight style={{ width: 16, height: 16, marginLeft: 6 }} /></>
+            }
           </button>
         </div>
       </div>
+
+      <style>{`
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      `}</style>
     </div>
   );
 }
