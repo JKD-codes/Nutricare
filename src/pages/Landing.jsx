@@ -133,7 +133,7 @@ export default function Landing() {
         <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 24px 64px' }}>
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(130px, 100%), 1fr))',
             gap: 16,
           }}>
             {stats.map((s, i) => (

@@ -75,7 +75,7 @@ export default function WeeklyReport({ mealPlanData, profile }) {
       </div>
 
       {/* Stats */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 16, marginBottom: 32 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(140px, 100%), 1fr))', gap: 16, marginBottom: 32 }}>
         {[
           { label: 'Adherence', value: `${score}%`, icon: Award, color: '#10b981', desc: 'Plan compliance' },
           { label: 'Avg Calories', value: avg.calories, icon: Flame, color: '#fb923c', desc: `Target: ${metrics.targetCalories}` },
@@ -177,7 +177,8 @@ export default function WeeklyReport({ mealPlanData, profile }) {
             background: 'rgba(16,185,129,0.03)', border: '1px solid rgba(16,185,129,0.1)',
           }}>
             <div style={{ ...sectionLabel, marginBottom: 24, textAlign: 'center', fontSize: '0.875rem' }}>TARGET MACROS</div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, textAlign: 'center' }}>
+            <div style={{ padding: '0 20px 20px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(80px, 100%), 1fr))', gap: 16, textAlign: 'center' }}>
               {[
                 { l: 'Carbs', t: `${metrics.macroDistribution?.carbs?.target || 0}%`, a: `${Math.round((avg.carbs * 4) / (avg.calories || 1) * 100)}%` },
                 { l: 'Protein', t: `${metrics.macroDistribution?.protein?.target || 0}%`, a: `${Math.round((avg.protein * 4) / (avg.calories || 1) * 100)}%` },
@@ -189,6 +190,7 @@ export default function WeeklyReport({ mealPlanData, profile }) {
                   <div style={{ fontSize: '0.8125rem', color: '#64748b' }}>goal: {m.t}</div>
                 </div>
               ))}
+            </div>
             </div>
           </div>
         </div>
